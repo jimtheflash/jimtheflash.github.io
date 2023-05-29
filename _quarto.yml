@@ -4,14 +4,21 @@ project:
 website:
   navbar:
     left:
-      - href: index.qmd
-        text: Home
-      - about.qmd
+      - file: index.qmd
+        text: "Home"
+      - href: https://github.com/jimtheflash/jk-resume/blob/master/jk-resume.pdf
+        text: "Resume"
+      - file: blog.qmd
+        text: "Blog"
+      - file: projects.qmd
+        text: "Projects"
 
 format:
   html:
-    theme: cosmo
     css: styles.css
+    link-external-newwindow: true
+    page-layout: full
+    theme: litera
 
 execute:
   freeze: auto
