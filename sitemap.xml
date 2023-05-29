@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://github.com/jimtheflash/jimtheflash.github.io/resume.html</loc>
+    <lastmod>2023-05-29T15:19:05.782Z</lastmod>
+  </url>
+  <url>
     <loc>https://github.com/jimtheflash/jimtheflash.github.io/blog.html</loc>
-    <lastmod>2023-05-29T15:05:23.129Z</lastmod>
+    <lastmod>2023-05-29T15:19:06.574Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/jimtheflash/jimtheflash.github.io/index.html</loc>
-    <lastmod>2023-05-29T15:05:23.717Z</lastmod>
+    <lastmod>2023-05-29T15:19:06.918Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/jimtheflash/jimtheflash.github.io/projects.html</loc>
-    <lastmod>2023-05-29T15:05:23.985Z</lastmod>
+    <lastmod>2023-05-29T15:19:07.250Z</lastmod>
   </url>
 </urlset>
