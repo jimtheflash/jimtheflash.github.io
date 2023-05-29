@@ -1,5 +1,6 @@
 ---
-title: "Resume!"
+title: "Resume & Talks"
 ---
 
 View and down my latest resume on [github](https://github.com/jimtheflash/jk-resume/blob/master/jk-resume.pdf){target="_blank"}.
+

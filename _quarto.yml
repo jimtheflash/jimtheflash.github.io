@@ -7,7 +7,7 @@ website:
       - file: index.qmd
         text: "Home"
       - href: resume.qmd
-        text: "Resume"
+        text: "Resume & Talks"
       - file: blog.qmd
         text: "Blog"
       - file: projects.qmd

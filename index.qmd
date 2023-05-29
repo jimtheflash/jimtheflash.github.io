@@ -4,4 +4,4 @@ title: "Welcome!"
 
 This is the personal website for Jim Kloet (*Kloet* rhymes with *flute*).
 
-Thanks for visiting! You can find my resume, blog, links to social and other projects using the navbar at the top.
+Thanks for visiting! You can find my resume, blog, links to social, and other projects using the navbar at the top.

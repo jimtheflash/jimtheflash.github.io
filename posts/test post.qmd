@@ -1,0 +1,6 @@
+---
+title: "Test Post"
+listing: default
+---
+
+This is a test post. Neato!
