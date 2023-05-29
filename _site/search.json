@@ -9,9 +9,9 @@
   {
     "objectID": "resume.html",
     "href": "resume.html",
-    "title": "Resume!",
+    "title": "Resume & CV",
     "section": "",
-    "text": "View and down my latest resume on github. Or in an iFrame below if that’s your jam."
+    "text": "Resume\nView and download my latest resume on github.\n\n\nTalks\nHere’s where I’ll link to RStudio::conf, and whatever talks I gave on the 311 dashboard.\n\n\nPeer-Reviewed Publications & Presentations\nHere’s where I’ll link to a handful of papers from my time in academic settings"
   },
   {
     "objectID": "resume.html#running-code",
@@ -25,7 +25,7 @@
     "href": "blog.html",
     "title": "Blog",
     "section": "",
-    "text": "This is where stuff I’ve written lives. I don’t know that I can call this a blog anymore - do people even still say blog? - given my infrequent posting habits, but we’ll see if that changes.\n\n\n\n\n\n\n\n\n\n\n\nTest Post\n\n\n\n\n\n\n\n\n\n\n \n\n\n\n\nNo matching items"
+    "text": "This is where stuff I’ve written lives. I don’t know that I can call this a blog anymore - do people even still say blog? - given my infrequent posting habits, but we’ll see if that changes.\n\n\n\n\n\n\n\n\n\n\n\nTest Post\n\n\n\n\n\n\n\n\n\n\n\n\nMay 29, 2023\n\n\nJim Kloet\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "projects.html",
@@ -39,6 +39,6 @@
     "href": "posts/test post.html",
     "title": "Test Post",
     "section": "",
-    "text": "This is a test post. Neato!\n\n\n\n\n\n\n\n\n\nNo matching items"
+    "text": "This is a test post. Neato!"
   }
 ]

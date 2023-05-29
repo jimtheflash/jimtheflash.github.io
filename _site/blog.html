@@ -70,9 +70,9 @@ ul.task-list li input[type="checkbox"] {
     }
 
     const options = {
-      valueNames: ['listing-title','listing-author','listing-description',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+      valueNames: ['listing-date','listing-title','listing-author','listing-description',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
       
-      searchColumns: ["listing-title","listing-author","listing-description"],
+      searchColumns: ["listing-date","listing-title","listing-author","listing-description"],
     };
 
     window['quarto-listings'] = window['quarto-listings'] || {};
@@ -161,7 +161,7 @@ ul.task-list li input[type="checkbox"] {
 
 <div class="quarto-listing quarto-listing-container-default" id="listing-listing">
 <div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-listing-file-modified-sort="1685383195751" data-listing-reading-time-sort="0.03">
+<div class="quarto-post image-right" data-index="0" data-listing-date-sort="1685336400000" data-listing-file-modified-sort="1685396608640" data-listing-reading-time-sort="0.03">
 <div class="body">
 <a href="./posts/test post.html">
 <h3 class="no-anchor listing-title">
@@ -176,7 +176,14 @@ This is a test post. Neato!
 </a>
 </div>
 <div class="metadata">
-<a href="./posts/test post.html"> </a>
+<a href="./posts/test post.html">
+<div class="listing-date">
+May 29, 2023
+</div>
+<div class="listing-author">
+Jim Kloet
+</div>
+</a>
 </div>
 </div>
 </div>

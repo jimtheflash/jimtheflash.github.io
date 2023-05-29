@@ -1,6 +1,7 @@
 ---
 title: "Test Post"
-listing: default
+author: "Jim Kloet"
+date: "2023-05-29"
 ---
 
 This is a test post. Neato!

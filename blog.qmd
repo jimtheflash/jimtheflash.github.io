@@ -1,7 +1,14 @@
 ---
 title: "Blog"
+type: grid
 listing: 
   contents: posts
+  sort: "date desc"
+  type: default
+  categories: false
+  sort-ui: false
+  filter-ui: false
+page-layout: full
 ---
 
 This is where stuff I've written lives. I don't know that I can call this a blog anymore - do people even still say blog? - given my infrequent posting habits, but we'll see if that changes.

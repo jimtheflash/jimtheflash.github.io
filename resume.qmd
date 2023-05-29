@@ -1,6 +1,15 @@
 ---
-title: "Resume & Talks"
+title: "Resume & CV"
 ---
 
-View and down my latest resume on [github](https://github.com/jimtheflash/jk-resume/blob/master/jk-resume.pdf){target="_blank"}.
+### Resume
 
+View and download my latest resume on [github](https://github.com/jimtheflash/jk-resume/blob/master/jk-resume.pdf){target="_blank"}.
+
+### Talks
+
+Here's where I'll link to RStudio::conf, and whatever talks I gave on the 311 dashboard.
+
+### Peer-Reviewed Publications & Presentations
+
+Here's where I'll link to a handful of papers from my time in academic settings
