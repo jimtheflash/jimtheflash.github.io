@@ -6,7 +6,7 @@ website:
     left:
       - file: index.qmd
         text: "Home"
-      - href: https://github.com/jimtheflash/jk-resume/blob/master/jk-resume.pdf
+      - href: resume.qmd
         text: "Resume"
       - file: blog.qmd
         text: "Blog"
