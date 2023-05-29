@@ -1,0 +1,9 @@
+---
+title: "Welcome!"
+---
+
+### This is the personal website for Jim Kloet (*Kloet* rhymes with *flute*).
+
+Thanks for visiting! You can find my resume, repositories, blog, and other projects using the navbar at the top.
+
+This site was made with Quarto, and it was absurdly easy.
