@@ -2,29 +2,36 @@
   {
     "objectID": "resume.html",
     "href": "resume.html",
-    "title": "Resume!",
+    "title": "Resume & Talks",
     "section": "",
     "text": "View and down my latest resume on github."
   },
   {
     "objectID": "blog.html",
     "href": "blog.html",
-    "title": "Blog!",
+    "title": "Blog",
     "section": "",
-    "text": "This is where stuff I’ve written lives. I don’t know that I can call this a blog anymore - do people even still say blog? - given my infrequent posting habits, but we’ll see if that changes."
+    "text": "This is where stuff I’ve written lives. I don’t know that I can call this a blog anymore - do people even still say blog? - given my infrequent posting habits, but we’ll see if that changes.\n\n\n\n\n\n\n\n\n\n  \n\n\n\n\nTest Post\n\n\n\n\n\n\n\n\n\n\n \n\n\n\n\nNo matching items"
   },
   {
     "objectID": "index.html",
     "href": "index.html",
     "title": "Welcome!",
     "section": "",
-    "text": "This is the personal website for Jim Kloet (Kloet rhymes with flute).\nThanks for visiting! You can find my resume, blog, links to social and other projects using the navbar at the top."
+    "text": "This is the personal website for Jim Kloet (Kloet rhymes with flute).\nThanks for visiting! You can find my resume, blog, links to social, and other projects using the navbar at the top."
   },
   {
     "objectID": "projects.html",
     "href": "projects.html",
-    "title": "Projects!",
+    "title": "Projects",
     "section": "",
     "text": "Here’s where I should link to data science projects, as well as art and science projects, that I’ve wrapped or am working on still."
+  },
+  {
+    "objectID": "posts/test post.html",
+    "href": "posts/test post.html",
+    "title": "Test Post",
+    "section": "",
+    "text": "This is a test post. Neato!\n\n\n\n\n\n\n\n\n\nNo matching items"
   }
 ]

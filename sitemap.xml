@@ -2,18 +2,22 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://github.com/jimtheflash/jimtheflash.github.io/resume.html</loc>
-    <lastmod>2023-05-29T15:19:05.782Z</lastmod>
+    <lastmod>2023-05-29T21:32:09.598Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/jimtheflash/jimtheflash.github.io/blog.html</loc>
-    <lastmod>2023-05-29T15:19:06.574Z</lastmod>
+    <lastmod>2023-05-29T21:32:10.270Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/jimtheflash/jimtheflash.github.io/index.html</loc>
-    <lastmod>2023-05-29T15:19:06.918Z</lastmod>
+    <lastmod>2023-05-29T21:32:10.542Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/jimtheflash/jimtheflash.github.io/projects.html</loc>
-    <lastmod>2023-05-29T15:19:07.250Z</lastmod>
+    <lastmod>2023-05-29T21:32:10.818Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/jimtheflash/jimtheflash.github.io/posts/test post.html</loc>
+    <lastmod>2023-05-29T21:32:11.098Z</lastmod>
   </url>
 </urlset>
