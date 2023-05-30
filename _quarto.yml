@@ -19,7 +19,11 @@ website:
       - icon: linkedin
         href: https://www.linkedin.com/in/jimkloet/
       - icon: shop
-        href: https://www.etsy.com/shop/DopeGenerativeArt
+        menu:
+          - text: DopeGenerativeArt (Etsy)
+            url: https://www.etsy.com/shop/DopeGenerativeArt
+          - text: Reverb Shop
+            url: https://reverb.com/shop/jims-gear-bazaar-659
 
 format:
   html:
