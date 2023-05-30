@@ -4,12 +4,14 @@ title: "Resume & CV"
 
 ### Resume
 
-View and download my latest resume on [github](https://github.com/jimtheflash/jk-resume/blob/master/jk-resume.pdf){target="_blank"}.
+View and download a pdf my latest resume on [github](https://github.com/jimtheflash/jk-resume/blob/master/jk-resume.pdf){target="_blank"}. This was created in LaTeX.
 
-### Talks
+### Professional Talks
 
-Here's where I'll link to RStudio::conf, and whatever talks I gave on the 311 dashboard.
+Kloet, J. (2022). [Garbage Data, And What To Do About Them](https://www.youtube.com/watch?v=PJUHRI30HBs). RStudio::conf(2022).
+
+Kloet, J. (2020). [Mapping 311 Requests In Chicago With Shiny, Leaflet, and plotly](https://www.youtube.com/watch?v=vsjbcKsORGs). UseR! 2020 Virtual Conference.
 
 ### Peer-Reviewed Publications & Presentations
 
-Here's where I'll link to a handful of papers from my time in academic settings
+I used to do research on learning, language, and personality. You can check out my peer-reviewed publications on [Google Scholar](https://scholar.google.com/citations?hl=en&user=6d1zQugAAAAJ&view_op=list_works&sortby=pubdate).

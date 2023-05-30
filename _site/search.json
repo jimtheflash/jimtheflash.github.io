@@ -11,7 +11,7 @@
     "href": "resume.html",
     "title": "Resume & CV",
     "section": "",
-    "text": "Resume\nView and download my latest resume on github.\n\n\nTalks\nHere’s where I’ll link to RStudio::conf, and whatever talks I gave on the 311 dashboard.\n\n\nPeer-Reviewed Publications & Presentations\nHere’s where I’ll link to a handful of papers from my time in academic settings"
+    "text": "Resume\nView and download my latest resume on github.\n\n\nProfessional Talks\nKloet, J. (2022). Bad Data, And What To Do About Them. RStudio::conf(2022).\nKloet, J. (2020). Mapping 311 Requests In Chicago With Shiny, Leaflet, and plotly. UseR! 2020 Virtual Conference.\n\n\nPeer-Reviewed Publications & Presentations\nHere’s where I’ll link to a handful of papers from my time in academic settings"
   },
   {
     "objectID": "resume.html#running-code",
