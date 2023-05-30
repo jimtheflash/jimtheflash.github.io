@@ -9,10 +9,17 @@ website:
         text: "About"
       - href: resume.qmd
         text: "Resume & CV"
-      - file: blog.qmd
-        text: "Blog"
+      # - file: blog.qmd
+      #   text: "Blog"
       - file: projects.qmd
         text: "Projects"
+    tools:
+      - icon: github
+        href: https://github.com/jimtheflash/
+      - icon: linkedin
+        href: https://www.linkedin.com/in/jimkloet/
+      - icon: shop
+        href: https://www.etsy.com/shop/DopeGenerativeArt
 
 format:
   html:

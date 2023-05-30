@@ -4,14 +4,14 @@
     "href": "index.html",
     "title": "Hello! I’m Jim",
     "section": "",
-    "text": "This is the personal website for Jim Kloet (Kloet rhymes with flute). I live with my family in Chicago, where I work as a data person. I also make music and art and software, and occasionally write about stuff that I think is interesting.\nThanks for visiting!"
+    "text": "This is the personal website for Jim Kloet (Kloet rhymes with flute). I live with my family in Chicago, where I work as a data person trying to help professionals make better decisions. I also make music, and art, and software, and occasionally write about stuff that I think is interesting.\nThanks for visiting!"
   },
   {
     "objectID": "resume.html",
     "href": "resume.html",
     "title": "Resume & CV",
     "section": "",
-    "text": "Resume\nView and download my latest resume on github.\n\n\nProfessional Talks\nKloet, J. (2022). Bad Data, And What To Do About Them. RStudio::conf(2022).\nKloet, J. (2020). Mapping 311 Requests In Chicago With Shiny, Leaflet, and plotly. UseR! 2020 Virtual Conference.\n\n\nPeer-Reviewed Publications & Presentations\nHere’s where I’ll link to a handful of papers from my time in academic settings"
+    "text": "Resume\nView and download a pdf my latest resume on github. This was created in LaTeX.\n\n\nProfessional Talks\nKloet, J. (2022). Garbage Data, And What To Do About Them. RStudio::conf(2022).\nKloet, J. (2020). Mapping 311 Requests In Chicago With Shiny, Leaflet, and plotly. UseR! 2020 Virtual Conference.\n\n\nPeer-Reviewed Publications & Presentations\nI used to do research on learning, language, and personality. You can check out my peer-reviewed publications on Google Scholar."
   },
   {
     "objectID": "resume.html#running-code",
@@ -25,14 +25,14 @@
     "href": "blog.html",
     "title": "Blog",
     "section": "",
-    "text": "This is where stuff I’ve written lives. I don’t know that I can call this a blog anymore - do people even still say blog? - given my infrequent posting habits, but we’ll see if that changes.\n\n\n\n\n\n\n\n\n\n\n\nTest Post\n\n\n\n\n\n\n\n\n\n\n\n\nMay 29, 2023\n\n\nJim Kloet\n\n\n\n\n\n\nNo matching items"
+    "text": "This is where stuff I’ve written lives. I don’t know that I can call this a blog anymore - do people even still say blog? - given my infrequent posting habits, but we’ll see if that changes.\n\n\n\n\n\n\n\n\n\n  \n\n\n\n\nTest Post\n\n\n\n\n\n\n\n\n\n\n\n\nMay 29, 2023\n\n\nJim Kloet\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "projects.html",
     "href": "projects.html",
     "title": "Projects",
     "section": "",
-    "text": "I was initially inspired to make generative art in ggplot2 by the work of Antonio Sánchez Chinchón and built a repo to share some of the functions I use to make art that I sell.\n\n\n\nSports data is what got me interested in data science. betfinder is a repo with functions for extracting selected wager info from selected sports books.\n\n\n\nSo far, just a repo with a single shiny dashboard surfacing some of the insights from betfinder’s automated production runs.\n\n\n\nbetfinder is functional and useful, but not super easy to deploy to the cloud, and not especially secure if we wanted to scale it. betfinder2 will be re-written primarily in python (and ported to R) with an eye toward deployment of workflows on AWS and Google Cloud.\n\n\n\n\n\n\nI live in Chicago, which has a public data portal of interesting information, including 311 requests. So I built a repo to grab 311 request data and plot it on a map of Chicago broken down by neighborhoods. (311 dash, betfinder, gambling dashboards, betfinder2)"
+    "text": "I was initially inspired to make generative art in ggplot2 by the work of Antonio Sánchez Chinchón and built a repo to share some of the functions I use to make art that I sell.\n\n\n\nSports data is what got me interested in data science. betfinder is a repo with functions for extracting selected wager info from selected sports books.\n\n\n\nSo far, just a repo with a single shiny dashboard surfacing some of the insights from betfinder’s automated production runs.\n\n\n\nbetfinder is functional and useful, but not super easy to deploy to the cloud, and not especially secure if we wanted to scale it. betfinder2 will be re-written primarily in python (and ported to R) with an eye toward deployment of workflows on AWS and Google Cloud.\n\n\n\n\n\n\nI live in Chicago, which has a public data portal of interesting information, including 311 requests. So I built a repo to grab 311 request data and plot it on a map of Chicago broken down by neighborhoods."
   },
   {
     "objectID": "posts/test post.html",
@@ -53,6 +53,13 @@
     "href": "projects.html#music",
     "title": "Projects",
     "section": "Music",
-    "text": "Music"
+    "text": "Music\nI sell music gear, so far only amps and guitars, on Reverb. If you have sparkly guitars or basses that you’re willing to sell or trade, LET ME KNOW.\nI also play and produce music, but I don’t record it very often. Here’s one representative example of my singer-songwritering."
+  },
+  {
+    "objectID": "projects.html#data-science",
+    "href": "projects.html#data-science",
+    "title": "Projects",
+    "section": "",
+    "text": "I was initially inspired to make generative art in ggplot2 by the work of Antonio Sánchez Chinchón and built a repo to share some of the functions I use to make art that I sell.\n\n\n\nSports data is what got me interested in data science. betfinder is a repo with functions for extracting selected wager info from selected sports books.\n\n\n\nSo far, just a repo with a single shiny dashboard surfacing some of the insights from betfinder’s automated production runs.\n\n\n\nbetfinder is functional and useful, but not super easy to deploy to the cloud, and not especially secure if we wanted to scale it. betfinder2 will be re-written primarily in python (and ported to R) with an eye toward deployment of workflows on AWS and Google Cloud.\n\n\n\n\n\n\nI live in Chicago, which has a public data portal of interesting information, including 311 requests. So I built a repo to grab 311 request data and plot it on a map of Chicago broken down by neighborhoods."
   }
 ]

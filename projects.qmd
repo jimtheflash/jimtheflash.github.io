@@ -4,7 +4,7 @@ title: "Projects"
 
 ## Data Science
 
-### Active Projects
+### *Active Projects*
 
 #### [DopeGenerativeArt](https://github.com/jimtheflash/DopeGenerativeArt)
 
@@ -18,11 +18,11 @@ Sports data is what got me interested in data science. `betfinder` is a repo wit
 
 So far, just a repo with a single `shiny` dashboard surfacing some of the insights from `betfinder`'s automated production runs.
 
-#### betfinder2
+#### [betfinder2](https://github.com/jimtheflash/betfinder2)
 
 `betfinder` is functional and useful, but not super easy to deploy to the cloud, and not especially secure if we wanted to scale it. `betfinder2` will be re-written primarily in `python` (and ported to `R`) with an eye toward deployment of workflows on AWS and Google Cloud.
 
-### Archived Projects
+### *Archived Projects*
 
 #### [chi311dash](https://github.com/jimtheflash/chi311dash)
 
@@ -33,3 +33,7 @@ I live in Chicago, which has a public data portal of interesting information, in
 I make generative art, mostly using `ggplot2`. My inspiration came almost entirely from the work Antonio Pinchon (find his real name). Here are a few samples: I sell it on Etsy at [DopeGenerativeArt](https://www.etsy.com/shop/DopeGenerativeArt).
 
 ## Music
+
+I sell music gear, so far only amps and guitars, on [Reverb](https://reverb.com/shop/jims-gear-bazaar-659). If you have sparkly guitars or basses that you're willing to sell or trade, LET ME KNOW.
+
+I also play and produce music, but I don't record it very often. Here's [one](https://www.youtube.com/watch?v=Eo8eFKuBYFM) representative example of my singer-songwritering.
