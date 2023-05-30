@@ -16,16 +16,37 @@
   {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "Welcome!",
+    "title": "Hello! I’m Jim",
     "section": "",
-    "text": "This is the personal website for Jim Kloet (Kloet rhymes with flute).\nThanks for visiting! Everything is in the navbar at the top."
+    "text": "This is the personal website for Jim Kloet (Kloet rhymes with flute). I live with my family in Chicago, where I work as a data person. I also make music and art and software, and occasionally write about stuff that I think is interesting.\nThanks for visiting!"
   },
   {
     "objectID": "projects.html",
     "href": "projects.html",
     "title": "Projects",
     "section": "",
-    "text": "Here’s where I should link to data science projects (311 dash, betfinder, gambling dashboards, betfinder2), as well as art (DopeGenerativeArt) and music (tiny desk) projects, that I’ve wrapped or am working on still."
+    "text": "I was initially inspired to make generative art in ggplot2 by the work of Antonio Sánchez Chinchón and built a repo to share some of the functions I use to make art that I sell.\n\n\n\nSports data is what got me interested in data science. betfinder is a repo with functions for extracting selected wager info from selected sports books.\n\n\n\nSo far, just a repo with a single shiny dashboard surfacing some of the insights from betfinder’s automated production runs.\n\n\n\nbetfinder is functional and useful, but not super easy to deploy to the cloud, and not especially secure if we wanted to scale it. betfinder2 will be re-written primarily in python (and ported to R) with an eye toward deployment of workflows on AWS and Google Cloud.\n\n\n\n\n\n\nI live in Chicago, which has a public data portal of interesting information, including 311 requests. So I built a repo to grab 311 request data and plot it on a map of Chicago broken down by neighborhoods."
+  },
+  {
+    "objectID": "projects.html#data-science",
+    "href": "projects.html#data-science",
+    "title": "Projects",
+    "section": "",
+    "text": "I was initially inspired to make generative art in ggplot2 by the work of Antonio Sánchez Chinchón and built a repo to share some of the functions I use to make art that I sell.\n\n\n\nSports data is what got me interested in data science. betfinder is a repo with functions for extracting selected wager info from selected sports books.\n\n\n\nSo far, just a repo with a single shiny dashboard surfacing some of the insights from betfinder’s automated production runs.\n\n\n\nbetfinder is functional and useful, but not super easy to deploy to the cloud, and not especially secure if we wanted to scale it. betfinder2 will be re-written primarily in python (and ported to R) with an eye toward deployment of workflows on AWS and Google Cloud.\n\n\n\n\n\n\nI live in Chicago, which has a public data portal of interesting information, including 311 requests. So I built a repo to grab 311 request data and plot it on a map of Chicago broken down by neighborhoods."
+  },
+  {
+    "objectID": "projects.html#art",
+    "href": "projects.html#art",
+    "title": "Projects",
+    "section": "Art",
+    "text": "Art\nI make generative art, mostly using ggplot2. My inspiration came almost entirely from the work Antonio Pinchon (find his real name). Here are a few samples: I sell it on Etsy at DopeGenerativeArt."
+  },
+  {
+    "objectID": "projects.html#music",
+    "href": "projects.html#music",
+    "title": "Projects",
+    "section": "Music",
+    "text": "Music"
   },
   {
     "objectID": "posts/test post.html",
