@@ -30,7 +30,7 @@ I live in Chicago, which has a public data portal of interesting information, in
 
 ## Art
 
-I make generative art, mostly using `ggplot2`. My inspiration came almost entirely from the work Antonio Pinchon (find his real name). Here are a few samples: I sell it on Etsy at [DopeGenerativeArt](https://www.etsy.com/shop/DopeGenerativeArt).
+I make generative art, and I sell it on Etsy at [DopeGenerativeArt](https://www.etsy.com/shop/DopeGenerativeArt).
 
 ## Music
 
