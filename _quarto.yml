@@ -2,10 +2,11 @@ project:
   type: website
 
 website:
+  favicon: logo.png
   navbar:
     left:
       - file: index.qmd
-        text: "Home"
+        text: "About"
       - href: resume.qmd
         text: "Resume & CV"
       - file: blog.qmd

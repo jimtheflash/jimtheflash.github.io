@@ -1,7 +1,10 @@
 ---
-title: "Welcome!"
+title: "Hello! I'm Jim"
+about:
+  template: jolla
+  image: logo.png
 ---
 
-This is the personal website for Jim Kloet (*Kloet* rhymes with *flute*).
+This is the personal website for Jim Kloet (*Kloet* rhymes with *flute*). I live with my family in Chicago, where I work as a data person. I also make music and art and software, and occasionally write about stuff that I think is interesting.
 
-Thanks for visiting! Everything is in the navbar at the top.
+Thanks for visiting!
