@@ -2,13 +2,13 @@
 title: "Projects"
 ---
 
-## Data Science
+Here's some stuff I work on when I'm not working for the man.
 
-### *Active Projects*
+## Active Projects
 
-#### [DopeGenerativeArt](https://github.com/jimtheflash/DopeGenerativeArt)
+#### [DopeGenerativeArt](https://www.etsy.com/shop/DopeGenerativeArt)
 
-I was initially inspired to make generative art in `ggplot2` by the work of [Antonio Sánchez Chinchón](https://fronkonstin.com/about/) and built a repo to share some of the functions I use to make art that I sell.
+I was initially inspired to make generative art in `ggplot2` by the work of [Antonio Sánchez Chinchón](https://fronkonstin.com/about/) and I opened up an Etsy shop to peddle my wares.
 
 #### [betfinder](https://github.com/jimtheflash/betfinder)
 
@@ -18,22 +18,19 @@ Sports data is what got me interested in data science. `betfinder` is a repo wit
 
 So far, just a repo with a single `shiny` dashboard surfacing some of the insights from `betfinder`'s automated production runs.
 
-#### [betfinder2](https://github.com/jimtheflash/betfinder2)
-
-`betfinder` is functional and useful, but not super easy to deploy to the cloud, and not especially secure if we wanted to scale it. `betfinder2` will be re-written primarily in `python` (and ported to `R`) with an eye toward deployment of workflows on AWS and Google Cloud.
-
-### *Archived Projects*
-
-#### [chi311dash](https://github.com/jimtheflash/chi311dash)
-
-I live in Chicago, which has a public data portal of interesting information, including 311 requests. So I built a repo to grab 311 request data and plot it on a map of Chicago broken down by neighborhoods.
-
-## Art
-
-I make generative art, and I sell it on Etsy at [DopeGenerativeArt](https://www.etsy.com/shop/DopeGenerativeArt).
-
-## Music
+#### Music
 
 I sell music gear, so far only amps and guitars, on [Reverb](https://reverb.com/shop/jims-gear-bazaar-659). If you have sparkly guitars or basses that you're willing to sell or trade, LET ME KNOW.
 
 I also play and produce music, but I don't record it very often. Here's [one](https://www.youtube.com/watch?v=Eo8eFKuBYFM) representative example of my singer-songwritering.
+
+
+#### [betfinder2](https://github.com/jimtheflash/betfinder2)
+
+`betfinder` is functional and useful, but not super easy to deploy to the cloud, and not especially secure if we wanted to scale it. `betfinder2` will be re-written primarily in `python` (and ported to `R`) with an eye toward deployment of workflows on AWS and Google Cloud.
+
+## Archived Projects
+
+#### [chi311dash](https://github.com/jimtheflash/chi311dash)
+
+I live in Chicago, which has a public data portal of interesting information, including 311 requests. So I built a repo to grab 311 request data and plot it on a map of Chicago broken down by neighborhoods.

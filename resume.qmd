@@ -4,7 +4,7 @@ title: "Resume & CV"
 
 ### Resume
 
-View and download a pdf my latest resume on [github](https://github.com/jimtheflash/jk-resume/blob/master/jk-resume.pdf){target="_blank"}. This was created in LaTeX.
+View and download a pdf of my latest resume on [github](https://github.com/jimtheflash/jk-resume/blob/master/jk-resume.pdf){target="_blank"}. This was created in LaTeX.
 
 ### Professional Talks
 
