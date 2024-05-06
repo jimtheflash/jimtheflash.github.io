@@ -5,6 +5,6 @@ about:
   image: logo.png
 ---
 
-This is the personal website for Jim Kloet (*Kloet* rhymes with *flute*). I live with my family in Chicago, where I work as a data person trying to help folks make better decisions. I also make music, visual art, software, and occasionally write about stuff that I think is interesting in my blog.
+This is the personal website for Jim Kloet (*Kloet* rhymes with *flute*). I live with my family in Chicago, where I work as a data person trying to help folks make better decisions. I also make music, visual art, software, and occasionally write about stuff.
 
 Thanks for visiting!

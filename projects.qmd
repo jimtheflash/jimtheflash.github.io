@@ -6,17 +6,13 @@ Here's some stuff I work on when I'm not working for the man.
 
 ## Active Projects
 
+#### [Slam Dunk Betting Services](https://slamdunkservices.github.io/)
+
+My partners and I developed machine learning and artificial intelligence tools to predict the outcomes of events in NBA games and identify plays that are +EV. We've been doing this since gambling was legalized in Illinois, and recently opened up our tools to subscribers.
+
 #### [DopeGenerativeArt](https://www.etsy.com/shop/DopeGenerativeArt)
 
 I was initially inspired to make generative art in `ggplot2` by the work of [Antonio Sánchez Chinchón](https://fronkonstin.com/about/) and I opened up an Etsy shop to peddle my wares.
-
-#### [betfinder](https://github.com/jimtheflash/betfinder)
-
-Sports data is what got me interested in data science. `betfinder` is a repo with functions for extracting selected wager info from selected sports books.
-
-#### [gambling_dashboards](https://github.com/jimtheflash/gambling_dashboards)
-
-So far, just a repo with a single `shiny` dashboard surfacing some of the insights from `betfinder`'s automated production runs.
 
 #### Music
 
@@ -24,13 +20,21 @@ I sell music gear, so far only amps and guitars, on [Reverb](https://reverb.com/
 
 I also play and produce music, but I don't record it very often. Here's [one](https://www.youtube.com/watch?v=Eo8eFKuBYFM) representative example of my singer-songwritering.
 
-
-#### [betfinder2](https://github.com/jimtheflash/betfinder2)
-
-`betfinder` is functional and useful, but not super easy to deploy to the cloud, and not especially secure if we wanted to scale it. `betfinder2` will be re-written primarily in `python` (and ported to `R`) with an eye toward deployment of workflows on AWS and Google Cloud.
-
-## Archived Projects
+## Archived & Privatized Projects
 
 #### [chi311dash](https://github.com/jimtheflash/chi311dash)
 
+_Archived_
 I live in Chicago, which has a public data portal of interesting information, including 311 requests. So I built a repo to grab 311 request data and plot it on a map of Chicago broken down by neighborhoods.
+
+#### [betfinder](https://github.com/jimtheflash/betfinder)
+
+_Privatized behind Slam Dunk_
+Sports data is what got me interested in data science. `betfinder` is a repo with functions for extracting selected wager info from selected sports books.
+
+#### [gambling_dashboards](https://github.com/jimtheflash/gambling_dashboards)
+
+_Privatized behind Slam Dunk_
+A repo with a single `shiny` dashboard surfacing some of the insights from `betfinder`'s automated production runs.
+
+#### 

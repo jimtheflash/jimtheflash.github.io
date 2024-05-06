@@ -4,9 +4,11 @@ title: "Resume & CV"
 
 ### Resume
 
-View and download a pdf of my latest resume on [github](https://github.com/jimtheflash/jk-resume/blob/master/jk-resume.pdf){target="_blank"}. This was created in LaTeX.
+View and download a pdf of my latest resume on [github](https://github.com/jimtheflash/jk-resume/blob/master/jk-resume.pdf){target="_blank"}. This was created in LaTeX using a modified version of the Awesome CV template.
 
 ### Professional Talks
+
+Kloet, J. (2023). [I Am A Data Scientist, And So Can You!](https://docs.google.com/presentation/d/1SlmkAw6ucC69ZTIG5DiFesC9Ph3-yyfR4jaEBSPzQUY/edit?usp=sharing). [Erdos Institute Invitation to Industry 2023 Fall Speakers Series.](https://www.erdosinstitute.org/invitations-to-industry)
 
 Kloet, J. (2022). [Garbage Data, And What To Do About Them](https://www.youtube.com/watch?v=PJUHRI30HBs). RStudio::conf(2022).
 
