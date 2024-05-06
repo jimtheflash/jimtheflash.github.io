@@ -1,12 +1,5 @@
 [
   {
-    "objectID": "posts/test post.html",
-    "href": "posts/test post.html",
-    "title": "Test Post",
-    "section": "",
-    "text": "This is a test post. Neato!"
-  },
-  {
     "objectID": "resume.html",
     "href": "resume.html",
     "title": "Resume & CV",
@@ -14,11 +7,11 @@
     "text": "Resume\nView and download a pdf of my latest resume on github. This was created in LaTeX.\n\n\nProfessional Talks\nKloet, J. (2022). Garbage Data, And What To Do About Them. RStudio::conf(2022).\nKloet, J. (2020). Mapping 311 Requests In Chicago With Shiny, Leaflet, and plotly. UseR! 2020 Virtual Conference.\n\n\nPeer-Reviewed Publications & Presentations\nI used to do research on learning, language, and personality. You can check out my peer-reviewed publications on Google Scholar."
   },
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Hello! I’m Jim",
+    "objectID": "posts/test post.html",
+    "href": "posts/test post.html",
+    "title": "Test Post",
     "section": "",
-    "text": "This is the personal website for Jim Kloet (Kloet rhymes with flute). I live with my family in Chicago, where I work as a data person trying to help folks make better decisions. I also make music, visual art, software, and occasionally write about stuff that I think is interesting in my blog.\nThanks for visiting!"
+    "text": "This is a test post. Neato!"
   },
   {
     "objectID": "projects.html",
@@ -40,6 +33,13 @@
     "title": "Projects",
     "section": "Archived Projects",
     "text": "Archived Projects\n\nchi311dash\nI live in Chicago, which has a public data portal of interesting information, including 311 requests. So I built a repo to grab 311 request data and plot it on a map of Chicago broken down by neighborhoods."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Hello! I’m Jim",
+    "section": "",
+    "text": "This is the personal website for Jim Kloet (Kloet rhymes with flute). I live with my family in Chicago, where I work as a data person trying to help folks make better decisions. I also make music, visual art, software, and occasionally write about stuff that I think is interesting in my blog.\nThanks for visiting!"
   },
   {
     "objectID": "blog.html",
