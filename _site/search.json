@@ -4,7 +4,7 @@
     "href": "resume.html",
     "title": "Resume & CV",
     "section": "",
-    "text": "Resume\nView and download a pdf of my latest resume on github. This was created in LaTeX.\n\n\nProfessional Talks\nKloet, J. (2022). Garbage Data, And What To Do About Them. RStudio::conf(2022).\nKloet, J. (2020). Mapping 311 Requests In Chicago With Shiny, Leaflet, and plotly. UseR! 2020 Virtual Conference.\n\n\nPeer-Reviewed Publications & Presentations\nI used to do research on learning, language, and personality. You can check out my peer-reviewed publications on Google Scholar."
+    "text": "Resume\nView and download a pdf of my latest resume on github. This was created in LaTeX using a modified version of the Awesome CV template.\n\n\nProfessional Talks\nKloet, J. (2023). I Am A Data Scientist, And So Can You!. Erdos Institute Invitation to Industry 2023 Fall Speakers Series.\nKloet, J. (2022). Garbage Data, And What To Do About Them. RStudio::conf(2022).\nKloet, J. (2020). Mapping 311 Requests In Chicago With Shiny, Leaflet, and plotly. UseR! 2020 Virtual Conference.\n\n\nPeer-Reviewed Publications & Presentations\nI used to do research on learning, language, and personality. You can check out my peer-reviewed publications on Google Scholar."
   },
   {
     "objectID": "posts/test post.html",
@@ -25,14 +25,14 @@
     "href": "projects.html#active-projects",
     "title": "Projects",
     "section": "Active Projects",
-    "text": "Active Projects\n\nDopeGenerativeArt\nI was initially inspired to make generative art in ggplot2 by the work of Antonio Sánchez Chinchón and I opened up an Etsy shop to peddle my wares.\n\n\nbetfinder\nSports data is what got me interested in data science. betfinder is a repo with functions for extracting selected wager info from selected sports books.\n\n\ngambling_dashboards\nSo far, just a repo with a single shiny dashboard surfacing some of the insights from betfinder’s automated production runs.\n\n\nMusic\nI sell music gear, so far only amps and guitars, on Reverb. If you have sparkly guitars or basses that you’re willing to sell or trade, LET ME KNOW.\nI also play and produce music, but I don’t record it very often. Here’s one representative example of my singer-songwritering.\n\n\nbetfinder2\nbetfinder is functional and useful, but not super easy to deploy to the cloud, and not especially secure if we wanted to scale it. betfinder2 will be re-written primarily in python (and ported to R) with an eye toward deployment of workflows on AWS and Google Cloud."
+    "text": "Active Projects\n\nSlam Dunk Betting Services\nMy partners and I developed machine learning and artificial intelligence tools to predict the outcomes of events in NBA games and identify plays that are +EV. We’ve been doing this since gambling was legalized in Illinois, and recently opened up our tools to subscribers.\n\n\nDopeGenerativeArt\nI was initially inspired to make generative art in ggplot2 by the work of Antonio Sánchez Chinchón and I opened up an Etsy shop to peddle my wares.\n\n\nMusic\nI sell music gear, so far only amps and guitars, on Reverb. If you have sparkly guitars or basses that you’re willing to sell or trade, LET ME KNOW.\nI also play and produce music, but I don’t record it very often. Here’s one representative example of my singer-songwritering."
   },
   {
-    "objectID": "projects.html#archived-projects",
-    "href": "projects.html#archived-projects",
+    "objectID": "projects.html#archived-privatized-projects",
+    "href": "projects.html#archived-privatized-projects",
     "title": "Projects",
-    "section": "Archived Projects",
-    "text": "Archived Projects\n\nchi311dash\nI live in Chicago, which has a public data portal of interesting information, including 311 requests. So I built a repo to grab 311 request data and plot it on a map of Chicago broken down by neighborhoods."
+    "section": "Archived & Privatized Projects",
+    "text": "Archived & Privatized Projects\n\nchi311dash\nArchived I live in Chicago, which has a public data portal of interesting information, including 311 requests. So I built a repo to grab 311 request data and plot it on a map of Chicago broken down by neighborhoods.\n\n\nbetfinder\nPrivatized behind Slam Dunk Sports data is what got me interested in data science. betfinder is a repo with functions for extracting selected wager info from selected sports books.\n\n\ngambling_dashboards\nPrivatized behind Slam Dunk A repo with a single shiny dashboard surfacing some of the insights from betfinder’s automated production runs."
   },
   {
     "objectID": "index.html",
