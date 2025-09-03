@@ -1,24 +1,10 @@
 [
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Hello! I’m Jim",
+    "objectID": "blog.html",
+    "href": "blog.html",
+    "title": "Blog",
     "section": "",
-    "text": "This is the personal website for Jim Kloet (Kloet rhymes with flute). I live with my family in Chicago, where I work as a data person trying to help folks make better decisions. I also make music, visual art, software, and occasionally write about stuff.\nThanks for visiting!"
-  },
-  {
-    "objectID": "posts/test post.html",
-    "href": "posts/test post.html",
-    "title": "Test Post",
-    "section": "",
-    "text": "This is a test post. Neato!"
-  },
-  {
-    "objectID": "resume.html",
-    "href": "resume.html",
-    "title": "Resume & CV",
-    "section": "",
-    "text": "Resume\nView and download a pdf of my latest resume on github. This was created in LaTeX using a modified version of the Awesome CV template.\n\n\nProfessional Talks\nKloet, J. (2023). I Am A Data Scientist, And So Can You!. Erdos Institute Invitation to Industry 2023 Fall Speakers Series.\nKloet, J. (2022). Garbage Data, And What To Do About Them. RStudio::conf(2022).\nKloet, J. (2020). Mapping 311 Requests In Chicago With Shiny, Leaflet, and plotly. UseR! 2020 Virtual Conference.\n\n\nPeer-Reviewed Publications & Presentations\nI used to do research on learning, language, and personality. You can check out my peer-reviewed publications on Google Scholar."
+    "text": "This is where stuff I’ve written lives. I don’t know that I can call this a blog anymore - do people even still say blog? - given my infrequent posting habits, but we’ll see if that changes.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nTest Post\n\n\n\n\n\n\n\n\n\n\n\nMay 29, 2023\n\n\nJim Kloet\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "projects.html",
@@ -32,7 +18,7 @@
     "href": "projects.html#active-projects",
     "title": "Projects",
     "section": "Active Projects",
-    "text": "Active Projects\n\nSlam Dunk Betting Services\nMy partners and I developed machine learning and artificial intelligence tools to predict the outcomes of events in NBA games and identify plays that are +EV. We’ve been doing this since gambling was legalized in Illinois, and recently opened up our tools to subscribers.\n\n\nDopeGenerativeArt\nI was initially inspired to make generative art in ggplot2 by the work of Antonio Sánchez Chinchón and I opened up an Etsy shop to peddle my wares.\n\n\nMusic\nI sell music gear, so far only amps and guitars, on Reverb. If you have sparkly guitars or basses that you’re willing to sell or trade, LET ME KNOW.\nI also play and produce music, but I don’t record it very often. Here’s one representative example of my singer-songwritering."
+    "text": "Active Projects\n\nSlam Dunk Betting Services\nMy partners and I developed machine learning and artificial intelligence tools to predict the outcomes of events in NBA games and identify plays that are +EV. We’ve been doing this since gambling was legalized in Illinois, and recently opened up our tools to subscribers.\n\n\nDopeGenerativeArt\nI was initially inspired to make generative art in ggplot2 by the work of Antonio Sánchez Chinchón and I opened up an Etsy shop to peddle my wares. I also make ice dyed clothing now!\n\n\nMusic\nI sell music gear, so far only amps and guitars, on Reverb. If you have sparkly guitars or basses that you’re willing to sell or trade, LET ME KNOW.\nI also play and produce music, but I don’t record it very often. Here’s one representative example of my singer-songwritering."
   },
   {
     "objectID": "projects.html#archived-privatized-projects",
@@ -42,10 +28,24 @@
     "text": "Archived & Privatized Projects\n\nchi311dash\nArchived I live in Chicago, which has a public data portal of interesting information, including 311 requests. So I built a repo to grab 311 request data and plot it on a map of Chicago broken down by neighborhoods.\n\n\nbetfinder\nPrivatized behind Slam Dunk Sports data is what got me interested in data science. betfinder is a repo with functions for extracting selected wager info from selected sports books.\n\n\ngambling_dashboards\nPrivatized behind Slam Dunk A repo with a single shiny dashboard surfacing some of the insights from betfinder’s automated production runs."
   },
   {
-    "objectID": "blog.html",
-    "href": "blog.html",
-    "title": "Blog",
+    "objectID": "resume.html",
+    "href": "resume.html",
+    "title": "Resume & CV",
     "section": "",
-    "text": "This is where stuff I’ve written lives. I don’t know that I can call this a blog anymore - do people even still say blog? - given my infrequent posting habits, but we’ll see if that changes.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nTest Post\n\n\n\n\n\n\n\n\n\n\n\nMay 29, 2023\n\n\nJim Kloet\n\n\n\n\n\n\nNo matching items"
+    "text": "Resume\nView and download a pdf of my latest resume on github.\n\n\nProfessional Talks\nKloet, J. (2023). I Am A Data Scientist, And So Can You!. Erdos Institute Invitation to Industry 2023 Fall Speakers Series.\nKloet, J. (2022). Garbage Data, And What To Do About Them. RStudio::conf(2022).\nKloet, J. (2020). Mapping 311 Requests In Chicago With Shiny, Leaflet, and plotly. UseR! 2020 Virtual Conference.\n\n\nPeer-Reviewed Publications & Presentations\nI used to do research on learning, language, and personality. You can check out my peer-reviewed publications on Google Scholar."
+  },
+  {
+    "objectID": "posts/test post.html",
+    "href": "posts/test post.html",
+    "title": "Test Post",
+    "section": "",
+    "text": "This is a test post. Neato!"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Hello! I’m Jim",
+    "section": "",
+    "text": "This is the personal website for Jim Kloet (Kloet rhymes with flute). I live with my family in Chicago, where I work as a data person trying to help folks make better decisions. I also make music, visual art, software, and occasionally write about stuff.\nThanks for visiting!"
   }
 ]
