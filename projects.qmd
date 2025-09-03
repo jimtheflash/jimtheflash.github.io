@@ -6,13 +6,13 @@ Here's some stuff I work on when I'm not working for the man.
 
 ## Active Projects
 
-#### [Slam Dunk Betting Services](https://slamdunkservices.github.io/)
+#### [Slam Dunk Betting Services](https://slamdunk.bet/)
 
 My partners and I developed machine learning and artificial intelligence tools to predict the outcomes of events in NBA games and identify plays that are +EV. We've been doing this since gambling was legalized in Illinois, and recently opened up our tools to subscribers.
 
 #### [DopeGenerativeArt](https://www.etsy.com/shop/DopeGenerativeArt)
 
-I was initially inspired to make generative art in `ggplot2` by the work of [Antonio Sánchez Chinchón](https://fronkonstin.com/about/) and I opened up an Etsy shop to peddle my wares.
+I was initially inspired to make generative art in `ggplot2` by the work of [Antonio Sánchez Chinchón](https://fronkonstin.com/about/) and I opened up an Etsy shop to peddle my wares. I also make ice dyed clothing now!
 
 #### Music
 
