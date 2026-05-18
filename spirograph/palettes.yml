@@ -1,0 +1,41 @@
+palettes:
+  - name: black_on_white
+    background: [255, 255, 255]
+    points: [0, 0, 0]
+    alpha: 30
+  - name: white_on_black
+    background: [0, 0, 0]
+    points: [255, 255, 255]
+    alpha: 28
+  - name: pink_on_deep_green
+    background: [3, 38, 30]
+    points: [255, 72, 176]
+    alpha: 32
+  - name: deep_green_on_pink
+    background: [255, 72, 176]
+    points: [3, 38, 30]
+    alpha: 34
+  - name: green_on_deep_magenta
+    background: [48, 0, 44]
+    points: [82, 255, 136]
+    alpha: 32
+  - name: deep_magenta_on_green
+    background: [82, 255, 136]
+    points: [48, 0, 44]
+    alpha: 34
+  - name: orange_on_midnight_blue
+    background: [4, 18, 48]
+    points: [255, 128, 36]
+    alpha: 32
+  - name: midnight_blue_on_orange
+    background: [255, 128, 36]
+    points: [4, 18, 48]
+    alpha: 34
+  - name: purple_on_lime
+    background: [218, 255, 72]
+    points: [126, 54, 255]
+    alpha: 34
+  - name: lime_on_purple
+    background: [126, 54, 255]
+    points: [218, 255, 72]
+    alpha: 34
