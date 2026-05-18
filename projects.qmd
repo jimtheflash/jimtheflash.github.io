@@ -6,6 +6,10 @@ Here's some stuff I work on when I'm not working for the man.
 
 ## Active Projects
 
+#### [Spirograph Playground](spirograph/index.html)
+
+An in-browser spirograph that draws hypotrochoids and epitrochoids in real time. All compute runs client-side in p5.js — pick a palette, randomize the gears, and save the result. Works on phones too.
+
 #### [Slam Dunk Betting Services](https://slamdunk.bet/)
 
 My partners and I developed machine learning and artificial intelligence tools to predict the outcomes of events in NBA games and identify plays that are +EV. We've been doing this since gambling was legalized in Illinois, and recently opened up our tools to subscribers.

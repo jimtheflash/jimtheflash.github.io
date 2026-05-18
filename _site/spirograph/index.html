@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Spirograph Playground</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.4/p5.min.js"></script>
+    <script defer src="./sketch.js"></script>
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="canvas-pane" aria-label="Drawing surface">
+        <header class="topbar">
+          <h1>Spirograph Playground</h1>
+          <p id="statusLine">Loading palettes...</p>
+        </header>
+        <div class="canvas-stage">
+          <div id="canvasMount" aria-label="Animated spirograph drawing"></div>
+        </div>
+
+        <div class="mobile-toolbar" aria-label="Quick controls">
+          <button id="mobileRandomBtn" type="button">New</button>
+          <button id="mobilePlayPauseBtn" type="button">Pause</button>
+          <button id="mobileFullscreenBtn" type="button">Fullscreen</button>
+        </div>
+
+        <button
+          id="controlsToggleBtn"
+          class="controls-toggle"
+          type="button"
+          aria-expanded="false"
+          aria-controls="controlsPane"
+        >
+          Show controls
+        </button>
+      </section>
+
+      <aside id="controlsPane" class="controls-pane" aria-label="Controls">
+        <section class="control-section">
+          <div class="field">
+            <label for="modeSelect">Mode</label>
+            <select id="modeSelect">
+              <option value="classic">Classic</option>
+              <option value="epicycle">Epicycle</option>
+            </select>
+          </div>
+
+          <div id="shapeControls" class="shape-controls" aria-label="Classic spirograph pieces">
+            <div class="field">
+              <label for="fixedPieceSelect">Fixed Piece</label>
+              <select id="fixedPieceSelect">
+                <option value="random">Random</option>
+                <option value="ring96">Ring 96</option>
+                <option value="ring120">Ring 120</option>
+                <option value="outer72">Outer gear 72</option>
+                <option value="outer96">Outer gear 96</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="wheelSelect">Rolling Wheel</label>
+              <select id="wheelSelect">
+                <option value="random">Random</option>
+                <option value="wheel24">Wheel 24</option>
+                <option value="wheel32">Wheel 32</option>
+                <option value="wheel40">Wheel 40</option>
+                <option value="wheel52">Wheel 52</option>
+                <option value="wheel64">Wheel 64</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="penHoleSelect">Pen Hole</label>
+              <select id="penHoleSelect">
+                <option value="random">Random</option>
+                <option value="nearCenter">Near center</option>
+                <option value="middle">Middle</option>
+                <option value="nearEdge">Near edge</option>
+                <option value="outerReach">Outer reach</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="paletteSelect">Palette</label>
+            <select id="paletteSelect"></select>
+            <div id="paletteBrowser" class="palette-browser" aria-label="Palette browser"></div>
+          </div>
+
+          <div class="button-grid">
+            <button id="randomizeBtn" type="button">New</button>
+            <button id="restartBtn" type="button">Restart</button>
+            <button id="playPauseBtn" type="button">Pause</button>
+            <button id="jumpEndBtn" type="button">End</button>
+            <button id="fullscreenBtn" type="button">Fullscreen</button>
+          </div>
+        </section>
+
+        <section class="control-section">
+          <div class="field">
+            <div class="label-row">
+              <label for="speedRange">Speed</label>
+              <span id="speedValue">1</span>
+            </div>
+            <input id="speedRange" type="range" min="0.01" max="1" step="0.01" value="1" autocomplete="off" />
+          </div>
+
+          <div class="field">
+            <div class="label-row">
+              <label for="progressRange">Progress</label>
+              <span id="progressValue">0%</span>
+            </div>
+            <input id="progressRange" type="range" min="0" max="1" value="0" />
+          </div>
+        </section>
+
+        <section class="control-section">
+          <div class="button-grid">
+            <button id="savePreviewBtn" type="button">Save Preview</button>
+            <button id="copyRecipeBtn" type="button">Copy Recipe</button>
+            <button id="saveRecipeBtn" type="button">Save Recipe</button>
+            <button id="loadRecipeBtn" type="button">Load Recipe</button>
+          </div>
+
+          <div class="field">
+            <label for="recipeBox">Recipe</label>
+            <textarea id="recipeBox" spellcheck="false"></textarea>
+          </div>
+        </section>
+      </aside>
+    </main>
+  </body>
+</html>

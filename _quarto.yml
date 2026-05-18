@@ -1,5 +1,7 @@
 project:
   type: website
+  resources:
+    - spirograph/**
 
 website:
   favicon: logo.png
