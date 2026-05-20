@@ -13,10 +13,12 @@
       <section class="canvas-pane" aria-label="Drawing surface">
         <header class="topbar">
           <h1>Spirograph Playground</h1>
-          <p id="statusLine">Loading palettes...</p>
         </header>
         <div class="canvas-stage">
           <div id="canvasMount" aria-label="Animated spirograph drawing"></div>
+          <div class="fullscreen-toolbar" aria-label="Fullscreen quick controls">
+            <button id="fullscreenExitBtn" type="button">Exit Fullscreen</button>
+          </div>
         </div>
 
         <div class="mobile-toolbar" aria-label="Quick controls">
@@ -36,6 +38,18 @@
         </button>
       </section>
 
+      <div
+        id="paneDivider"
+        class="pane-divider"
+        role="separator"
+        aria-label="Resize drawing and controls panes"
+        aria-orientation="vertical"
+        aria-valuemin="280"
+        aria-valuemax="520"
+        aria-valuenow="360"
+        tabindex="0"
+      ></div>
+
       <aside id="controlsPane" class="controls-pane" aria-label="Controls">
         <section class="control-section">
           <div class="field">
@@ -47,45 +61,66 @@
           </div>
 
           <div id="shapeControls" class="shape-controls" aria-label="Classic spirograph pieces">
-            <div class="field">
-              <label for="fixedPieceSelect">Fixed Piece</label>
-              <select id="fixedPieceSelect">
-                <option value="random">Random</option>
-                <option value="ring96">Ring 96</option>
-                <option value="ring120">Ring 120</option>
-                <option value="outer72">Outer gear 72</option>
-                <option value="outer96">Outer gear 96</option>
-              </select>
+            <div class="shape-group">
+              <div class="shape-group-label">Outer piece</div>
+              <div class="icon-row icon-row-quad" id="outerShapeRow" role="radiogroup" aria-label="Outer piece shape"></div>
+              <div class="icon-row" id="outerVariantRow" role="radiogroup" aria-label="Outer piece variant"></div>
+              <div class="size-row" id="outerSizeRow" role="radiogroup" aria-label="Outer piece size"></div>
             </div>
 
-            <div class="field">
-              <label for="wheelSelect">Rolling Wheel</label>
-              <select id="wheelSelect">
-                <option value="random">Random</option>
-                <option value="wheel24">Wheel 24</option>
-                <option value="wheel32">Wheel 32</option>
-                <option value="wheel40">Wheel 40</option>
-                <option value="wheel52">Wheel 52</option>
-                <option value="wheel64">Wheel 64</option>
-              </select>
-            </div>
-
-            <div class="field">
-              <label for="penHoleSelect">Pen Hole</label>
-              <select id="penHoleSelect">
-                <option value="random">Random</option>
-                <option value="nearCenter">Near center</option>
-                <option value="middle">Middle</option>
-                <option value="nearEdge">Near edge</option>
-                <option value="outerReach">Outer reach</option>
-              </select>
+            <div class="shape-group">
+              <div class="shape-group-label">Inner wheel</div>
+              <div class="icon-row" id="innerShapeRow" role="radiogroup" aria-label="Inner wheel shape"></div>
+              <div class="wheel-icon-wrap">
+                <svg id="wheelIcon" viewBox="-50 -50 100 100" aria-label="Wheel with pen-hole positions">
+                  <ellipse id="wheelOutline" cx="0" cy="0" rx="32" ry="32" fill="none" stroke="currentColor" stroke-width="2.5" />
+                  <g id="penHoleDots"></g>
+                </svg>
+              </div>
+              <div class="size-row" id="wheelSizeRow" role="radiogroup" aria-label="Inner wheel size"></div>
             </div>
           </div>
 
-          <div class="field">
-            <label for="paletteSelect">Palette</label>
-            <select id="paletteSelect"></select>
-            <div id="paletteBrowser" class="palette-browser" aria-label="Palette browser"></div>
+          <div id="epicycleControls" class="epicycle-controls" hidden aria-label="Epicycle parameters">
+            <div class="field">
+              <div class="label-row">
+                <label for="epiSymmetryRange">Symmetry</label>
+                <span id="epiSymmetryValue">4</span>
+              </div>
+              <input id="epiSymmetryRange" type="range" min="3" max="9" step="1" value="4" />
+            </div>
+            <div class="field">
+              <div class="label-row">
+                <label for="epiWobbleAmountRange">Wobble amount</label>
+                <span id="epiWobbleAmountValue">0.05</span>
+              </div>
+              <input id="epiWobbleAmountRange" type="range" min="0" max="0.20" step="0.01" value="0.05" />
+            </div>
+            <div class="field">
+              <div class="label-row">
+                <label for="epiWobbleFreqRange">Wobble frequency</label>
+                <span id="epiWobbleFreqValue">3</span>
+              </div>
+              <input id="epiWobbleFreqRange" type="range" min="0.5" max="8" step="0.1" value="3" />
+            </div>
+            <div class="field">
+              <div class="label-row">
+                <label for="epiRotationDriftRange">Rotation drift (×π)</label>
+                <span id="epiRotationDriftValue">0</span>
+              </div>
+              <input id="epiRotationDriftRange" type="range" min="-10" max="10" step="0.1" value="0" />
+            </div>
+          </div>
+
+          <div class="color-pickers">
+            <div class="field">
+              <label id="bgSwatchLabel">Background</label>
+              <div id="bgSwatchGrid" class="swatch-grid" role="radiogroup" aria-labelledby="bgSwatchLabel"></div>
+            </div>
+            <div class="field">
+              <label id="fgSwatchLabel">Line color</label>
+              <div id="fgSwatchGrid" class="swatch-grid" role="radiogroup" aria-labelledby="fgSwatchLabel"></div>
+            </div>
           </div>
 
           <div class="button-grid">
@@ -116,17 +151,19 @@
         </section>
 
         <section class="control-section">
-          <div class="button-grid">
-            <button id="savePreviewBtn" type="button">Save Preview</button>
-            <button id="copyRecipeBtn" type="button">Copy Recipe</button>
-            <button id="saveRecipeBtn" type="button">Save Recipe</button>
-            <button id="loadRecipeBtn" type="button">Load Recipe</button>
-          </div>
+          <button id="savePreviewBtn" type="button">Save Preview</button>
 
-          <div class="field">
-            <label for="recipeBox">Recipe</label>
-            <textarea id="recipeBox" spellcheck="false"></textarea>
-          </div>
+          <details id="recipeDetails" class="recipe-details">
+            <summary>Recipe</summary>
+            <div class="recipe-body">
+              <div class="button-grid">
+                <button id="copyRecipeBtn" type="button">Copy</button>
+                <button id="saveRecipeBtn" type="button">Save</button>
+                <button id="loadRecipeBtn" type="button">Load</button>
+              </div>
+              <textarea id="recipeBox" spellcheck="false"></textarea>
+            </div>
+          </details>
         </section>
       </aside>
     </main>
