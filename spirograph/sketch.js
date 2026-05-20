@@ -14,7 +14,6 @@ const PREVIEW_EXPORT_SIZE = 900;
 const MAX_PLAYBACK_STEPS_PER_FRAME = 2400;
 const MAX_TOTAL_STEPS = 10000000;
 const GENERATED_TOTAL_STEPS = MAX_TOTAL_STEPS;
-const SPARKLE_TRAIL_LIMIT = 180;
 const MAX_REDRAW_VERTICES = 140000;
 const FIT_SAMPLE_POINTS = 120000;
 const MIN_DRAW_SPEED = 0.01;
@@ -26,7 +25,14 @@ const RECENT_TRAIL_OPACITY = 0.9;
 const FRESH_TRAIL_REPEATS = 1;
 const RECENT_FADE_REPEATS = 6;
 const RECENT_FADE_CHUNKS = 18;
+const RECENT_TRAIL_DECAY_REMAINDER = 0.06;
 const RECENT_CHUNK_VERTEX_LIMIT = 9000;
+const TRAIL_CAP_ROUND = "round";
+const TRAIL_CAP_BUTT = "butt";
+const PLAYBACK_PLAYING = "playing";
+const PLAYBACK_PAUSED = "paused";
+const PLAYBACK_ENDING = "ending";
+const END_TRANSITION_MS = 1200;
 const CONTROLS_WIDTH_STORAGE_KEY = "spirographPlaygroundControlsWidth";
 const DEFAULT_CONTROLS_WIDTH = 360;
 const MIN_CONTROLS_WIDTH = 280;
@@ -39,7 +45,7 @@ const MIN_CANVAS_PANE_WIDTH = 340;
 const OUTER_SHAPES = [
   { id: "circle", label: "Circle" },
   { id: "square", label: "Square" },
-  { id: "hexagon", label: "Hexagon" },
+  { id: "triangle", label: "Triangle" },
   { id: "star", label: "Star" },
 ];
 const STAR_POINTS = 5;
@@ -54,13 +60,12 @@ const OUTER_VARIANTS = [
   { id: "epitrochoid", label: "Outside" },
 ];
 
-// Inner (rolling) shapes — circle plus two ellipse aspect ratios. The aspect
-// modulates the pen's offset in x vs. y, so an "Oval H" inner produces a
-// horizontally-stretched epi/hypocycloid.
+// Inner (rolling) shapes. Ellipse-style shapes scale the pen offset; the
+// half-circle traces a folded arc for a different wheel feel.
 const INNER_SHAPES = [
   { id: "circle", label: "Circle", aspectX: 1, aspectY: 1 },
   { id: "ellipseWide", label: "Oval H", aspectX: 1.4, aspectY: 0.7 },
-  { id: "ellipseTall", label: "Oval V", aspectX: 0.7, aspectY: 1.4 },
+  { id: "halfCircle", label: "Half circle", aspectX: 1, aspectY: 1 },
 ];
 
 const ROLLING_WHEELS = [
@@ -90,12 +95,11 @@ let recipe = null;
 let pathPoints = emptyPathPoints();
 let baseTrailLayer = null;
 let recentTrailLayer = null;
-let sparkLayer = null;
-let sparkles = [];
 let canvasSize = 720;
 let currentStep = 0;
 let renderedStep = 0;
-let isPlaying = true;
+let playbackState = PLAYBACK_PLAYING;
+let endingTransition = null;
 let activePanePointerId = null;
 let resizeObserver = null;
 let resizeRaf = 0;
@@ -190,8 +194,13 @@ function draw() {
     return;
   }
 
-  if (isPlaying) {
+  if (playbackState === PLAYBACK_PLAYING) {
     advancePlayback();
+  }
+
+  if (playbackState === PLAYBACK_ENDING) {
+    drawEndingTransition();
+    return;
   }
 
   const colors = activeColors();
@@ -199,8 +208,6 @@ function draw() {
   background(...colors.background);
   image(baseTrailLayer, 0, 0);
   image(recentTrailLayer, 0, 0);
-  updateSparkles();
-  image(sparkLayer, 0, 0);
 }
 
 function windowResized() {
@@ -341,8 +348,8 @@ function outerShapeIconSvg(shapeId) {
   switch (shapeId) {
     case "square":
       return '<svg viewBox="0 0 40 40" aria-hidden="true"><rect x="6" y="6" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.5" /></svg>';
-    case "hexagon":
-      return '<svg viewBox="0 0 40 40" aria-hidden="true"><polygon points="20,5 33,12.5 33,27.5 20,35 7,27.5 7,12.5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round" /></svg>';
+    case "triangle":
+      return '<svg viewBox="0 0 40 40" aria-hidden="true"><polygon points="20,5 34,33 6,33" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round" /></svg>';
     case "star":
       return '<svg viewBox="0 0 40 40" aria-hidden="true"><polygon points="20,4 24,16 36,16 26,23 30,35 20,28 10,35 14,23 4,16 16,16" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" /></svg>';
     case "circle":
@@ -362,8 +369,8 @@ function innerShapeIconSvg(shapeId) {
   switch (shapeId) {
     case "ellipseWide":
       return '<svg viewBox="0 0 40 40" aria-hidden="true"><ellipse cx="20" cy="20" rx="15" ry="8" fill="none" stroke="currentColor" stroke-width="2.5" /></svg>';
-    case "ellipseTall":
-      return '<svg viewBox="0 0 40 40" aria-hidden="true"><ellipse cx="20" cy="20" rx="8" ry="15" fill="none" stroke="currentColor" stroke-width="2.5" /></svg>';
+    case "halfCircle":
+      return '<svg viewBox="0 0 40 40" aria-hidden="true"><path d="M7 25 A13 13 0 0 1 33 25 L7 25 Z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round" /></svg>';
     case "circle":
     default:
       return '<svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="13" fill="none" stroke="currentColor" stroke-width="2.5" /></svg>';
@@ -448,9 +455,11 @@ function installUiEvents() {
 
   ui.progressRange.addEventListener("input", () => {
     if (!recipe) return;
-    isPlaying = false;
+    clearEndingTransition();
+    playbackState = PLAYBACK_PAUSED;
     currentStep = Number(ui.progressRange.value);
     renderTrailToStep(currentStep);
+    syncPlaybackUi();
   });
 
   ui.savePreviewBtn.addEventListener("click", savePreview);
@@ -718,12 +727,21 @@ function randomizeArtwork(overrides = {}) {
   applyRecipe(nextRecipe, { startPlaying: true });
 }
 
-function pickRandomColors(seed) {
+function pickRandomColors(seed, avoidColors = null) {
   if (palettes.length === 0) {
     return { background: DEFAULT_BG.slice(), points: DEFAULT_FG.slice() };
   }
+  const avoidBgKey = avoidColors ? rgbKey(avoidColors.background) : null;
+  const avoidPointKey = avoidColors ? rgbKey(avoidColors.points) : null;
+  const candidates =
+    avoidBgKey || avoidPointKey
+      ? palettes.filter((palette) => {
+          return rgbKey(palette.background) !== avoidBgKey || rgbKey(palette.points) !== avoidPointKey;
+        })
+      : palettes;
+  const paletteChoices = candidates.length > 0 ? candidates : palettes;
   const rng = mulberry32(seed ^ 0xa1b2c3d4);
-  const choice = palettes[Math.floor(rng() * palettes.length) % palettes.length];
+  const choice = paletteChoices[Math.floor(rng() * paletteChoices.length) % paletteChoices.length];
   return {
     background: choice.background.slice(),
     points: choice.points.slice(),
@@ -751,12 +769,12 @@ function makeRecipe({ mode, seed, colors, shapeSelection }) {
 }
 
 function applyRecipe(nextRecipe, options = {}) {
+  clearEndingTransition();
   recipe = normalizeRecipe(nextRecipe);
   pathPoints = generatePathPoints(recipe);
   currentStep = clamp(Math.round(Number(recipe.currentStep || 0)), 0, recipe.totalSteps);
   renderedStep = 0;
-  sparkles = [];
-  isPlaying = options.startPlaying ?? false;
+  playbackState = options.startPlaying ? PLAYBACK_PLAYING : PLAYBACK_PAUSED;
 
   ui.modeSelect.value = recipe.mode;
   ui.speedRange.value = formatSpeedValue(recipe.drawSpeed);
@@ -951,22 +969,30 @@ const LEGACY_FIXED_PIECE_MAP = {
   outer96: { outerSizeId: "size96", variantId: "epitrochoid" },
 };
 
+function normalizeOuterShapeId(shapeId, fallback = "circle") {
+  if (OUTER_SHAPE_BY_ID[shapeId]) return shapeId;
+  if (shapeId === "hexagon") return "triangle";
+  return OUTER_SHAPE_BY_ID[fallback] ? fallback : null;
+}
+
+function normalizeInnerShapeId(shapeId, fallback = "circle") {
+  if (INNER_SHAPE_BY_ID[shapeId]) return shapeId;
+  if (shapeId === "ellipseTall") return "halfCircle";
+  return INNER_SHAPE_BY_ID[fallback] ? fallback : null;
+}
+
 function normalizeClassicShape(sourceShape, params) {
   const inferred = shapeFromClassicParams(params);
   const legacy = sourceShape?.fixedPieceId ? LEGACY_FIXED_PIECE_MAP[sourceShape.fixedPieceId] : null;
 
-  const outerShapeId = OUTER_SHAPE_BY_ID[sourceShape?.outerShapeId]
-    ? sourceShape.outerShapeId
-    : inferred.outerShapeId;
+  const outerShapeId = normalizeOuterShapeId(sourceShape?.outerShapeId, inferred.outerShapeId);
   const outerSizeId = OUTER_SIZE_BY_ID[sourceShape?.outerSizeId]
     ? sourceShape.outerSizeId
     : legacy?.outerSizeId || inferred.outerSizeId;
   const variantId = OUTER_VARIANT_BY_ID[sourceShape?.variantId]
     ? sourceShape.variantId
     : legacy?.variantId || inferred.variantId;
-  const innerShapeId = INNER_SHAPE_BY_ID[sourceShape?.innerShapeId]
-    ? sourceShape.innerShapeId
-    : inferred.innerShapeId;
+  const innerShapeId = normalizeInnerShapeId(sourceShape?.innerShapeId, inferred.innerShapeId);
   const wheelId = ROLLING_WHEEL_BY_ID[sourceShape?.wheelId] ? sourceShape.wheelId : inferred.wheelId;
   const penHoleId = PEN_HOLE_BY_ID[sourceShape?.penHoleId] ? sourceShape.penHoleId : inferred.penHoleId;
 
@@ -975,9 +1001,9 @@ function normalizeClassicShape(sourceShape, params) {
 
 function shapeFromClassicParams(params = {}) {
   const variantId = params.variant === "epitrochoid" ? "epitrochoid" : "hypotrochoid";
-  const outerShapeId = OUTER_SHAPE_BY_ID[params.outerShapeId] ? params.outerShapeId : "circle";
+  const outerShapeId = normalizeOuterShapeId(params.outerShapeId, "circle");
   const outerSize = closestBy(OUTER_SIZES, params.fixedRadius || OUTER_SIZES[0].radius, "radius");
-  const innerShapeId = INNER_SHAPE_BY_ID[params.innerShapeId] ? params.innerShapeId : "circle";
+  const innerShapeId = normalizeInnerShapeId(params.innerShapeId, "circle");
   const wheel = closestBy(ROLLING_WHEELS, params.rollingRadius || ROLLING_WHEELS[0].radius, "radius");
   const penRatio = wheel.radius > 0 ? (params.penDistance || wheel.radius * 0.62) / wheel.radius : 0.62;
   const penHole = closestBy(PEN_HOLES, penRatio, "ratio");
@@ -996,8 +1022,8 @@ function normalizeClassicParams(params = {}) {
   const fixedRadius = Number(params.fixedRadius);
   const rollingRadius = Number(params.rollingRadius);
   const tMax = Number(params.tMax);
-  const outerShapeId = OUTER_SHAPE_BY_ID[params.outerShapeId] ? params.outerShapeId : "circle";
-  const innerShape = INNER_SHAPE_BY_ID[params.innerShapeId] || INNER_SHAPES[0];
+  const outerShapeId = normalizeOuterShapeId(params.outerShapeId, "circle");
+  const innerShape = INNER_SHAPE_BY_ID[normalizeInnerShapeId(params.innerShapeId, "circle")] || INNER_SHAPES[0];
   const safeFixedRadius = Number.isFinite(fixedRadius) ? fixedRadius : 96;
   const aspectX = Number.isFinite(Number(params.innerAspectX))
     ? Number(params.innerAspectX)
@@ -1121,18 +1147,16 @@ function makeClassicParams(seed, shapeSelection) {
 }
 
 function resolveClassicShapeSelection(selection, rng) {
-  const outerShapeId = OUTER_SHAPE_BY_ID[selection?.outerShapeId]
-    ? selection.outerShapeId
-    : OUTER_SHAPES[randomInt(rng, 0, OUTER_SHAPES.length - 1)].id;
+  const selectedOuterShapeId = normalizeOuterShapeId(selection?.outerShapeId, null);
+  const selectedInnerShapeId = normalizeInnerShapeId(selection?.innerShapeId, null);
+  const outerShapeId = selectedOuterShapeId || OUTER_SHAPES[randomInt(rng, 0, OUTER_SHAPES.length - 1)].id;
   const outerSizeId = OUTER_SIZE_BY_ID[selection?.outerSizeId]
     ? selection.outerSizeId
     : OUTER_SIZES[randomInt(rng, 0, OUTER_SIZES.length - 1)].id;
   const variantId = OUTER_VARIANT_BY_ID[selection?.variantId]
     ? selection.variantId
     : OUTER_VARIANTS[randomInt(rng, 0, OUTER_VARIANTS.length - 1)].id;
-  const innerShapeId = INNER_SHAPE_BY_ID[selection?.innerShapeId]
-    ? selection.innerShapeId
-    : INNER_SHAPES[randomInt(rng, 0, INNER_SHAPES.length - 1)].id;
+  const innerShapeId = selectedInnerShapeId || INNER_SHAPES[randomInt(rng, 0, INNER_SHAPES.length - 1)].id;
   const wheelId = ROLLING_WHEEL_BY_ID[selection?.wheelId]
     ? selection.wheelId
     : ROLLING_WHEELS[randomInt(rng, 0, ROLLING_WHEELS.length - 1)].id;
@@ -1234,14 +1258,15 @@ function rawPointForRecipe(activeRecipe, progress) {
 
 // Generalized trochoid: replaces the constant outer radius R with a
 // shape-dependent function R_outer(t), and the unit pen offset with an
-// inner-shape aspect modulation. This is "approximate rolling" — the inner
-// center traces the outer perimeter exactly, while the inner's rotation rate
-// uses the outer's *mean* radius so closure ratios match the classic case.
+// inner-shape modulation. This is "approximate rolling" — the inner center
+// traces the outer perimeter exactly, while the inner's rotation rate uses the
+// outer's *mean* radius so closure ratios match the classic case.
 function rawClassicPoint(params, progress) {
   const r = params.rollingRadius;
   const Rmean = Number.isFinite(Number(params.outerMeanRadius))
     ? Number(params.outerMeanRadius)
     : params.fixedRadius;
+  const innerShapeId = params.innerShapeId || "circle";
   const aspectX = Number.isFinite(Number(params.innerAspectX)) ? Number(params.innerAspectX) : 1;
   const aspectY = Number.isFinite(Number(params.innerAspectY)) ? Number(params.innerAspectY) : 1;
   const baseD = params.penDistance;
@@ -1264,21 +1289,35 @@ function rawClassicPoint(params, progress) {
     cx = (Rt + r) * Math.cos(t);
     cy = (Rt + r) * Math.sin(t);
     phi = ((Rmean + r) / r) * t;
-    penX = d * aspectX * Math.cos(phi);
-    penY = d * aspectY * Math.sin(phi);
+    ({ x: penX, y: penY } = innerPenOffset(innerShapeId, d, phi, aspectX, aspectY));
     x = cx - penX;
     y = cy - penY;
   } else {
     cx = (Rt - r) * Math.cos(t);
     cy = (Rt - r) * Math.sin(t);
     phi = ((Rmean - r) / r) * t;
-    penX = d * aspectX * Math.cos(phi);
-    penY = d * aspectY * Math.sin(phi);
+    ({ x: penX, y: penY } = innerPenOffset(innerShapeId, d, phi, aspectX, aspectY));
     x = cx + penX;
     y = cy - penY;
   }
 
   return rotatePoint({ x, y }, params.rotation + (params.rotationDrift || 0) * progress);
+}
+
+function innerPenOffset(innerShapeId, distance, angle, aspectX, aspectY) {
+  if (innerShapeId === "halfCircle") {
+    const folded = positiveModulo(angle, TWO_PI_VALUE);
+    const arcAngle = folded <= Math.PI ? folded : TWO_PI_VALUE - folded;
+    return {
+      x: distance * Math.cos(arcAngle),
+      y: distance * (Math.sin(arcAngle) - 0.5),
+    };
+  }
+
+  return {
+    x: distance * aspectX * Math.cos(angle),
+    y: distance * aspectY * Math.sin(angle),
+  };
 }
 
 function outerRadiusAt(t, params) {
@@ -1296,11 +1335,11 @@ function outerRadiusUnit(t, shapeId) {
       const denom = Math.max(c, s);
       return denom > 1e-6 ? 1 / denom : 1;
     }
-    case "hexagon": {
-      // Regular hexagon: radius from center to perimeter, smooth between vertices.
-      const sector = Math.PI / 3;
-      const half = Math.PI / 6;
-      const wedge = ((t % sector) + sector) % sector;
+    case "triangle": {
+      // Regular triangle: radius from center to perimeter, smooth between vertices.
+      const sector = TWO_PI_VALUE / 3;
+      const half = sector * 0.5;
+      const wedge = positiveModulo(t, sector);
       const denom = Math.cos(wedge - half);
       return denom > 1e-6 ? Math.cos(half) / denom : 1;
     }
@@ -1379,8 +1418,6 @@ function resizeArtworkCanvas() {
   baseTrailLayer.pixelDensity(1);
   recentTrailLayer = createGraphics(canvasSize, canvasSize);
   recentTrailLayer.pixelDensity(1);
-  sparkLayer = createGraphics(canvasSize, canvasSize);
-  sparkLayer.pixelDensity(1);
   renderTrailToStep(currentStep);
 }
 
@@ -1391,7 +1428,6 @@ function renderTrailToStep(step) {
   drawBaseTrailToStep(step, baseTrailLayer, canvasSize);
   drawRecentTrailToStep(step, recentTrailLayer, canvasSize);
   renderedStep = step;
-  clearSparkles();
   syncProgressUi();
 }
 
@@ -1399,31 +1435,52 @@ function clearTransparentLayer(target) {
   target.clear();
 }
 
-function drawTrailCompositeToStep(step, target, size) {
-  const colors = activeColors();
+function drawTrailCompositeToStep(step, target, size, colors = activeColors()) {
   target.push();
   target.background(...colors.background);
   target.pop();
-  drawBaseTrailToStep(step, target, size);
-  drawRecentTrailToStep(step, target, size);
+  drawBaseTrailToStep(step, target, size, colors);
+  drawRecentTrailToStep(step, target, size, colors);
 }
 
-function drawBaseTrailToStep(step, target, size) {
-  drawBaseTrailSegment(0, step, target, size);
+function drawBaseTrailToStep(step, target, size, colors = activeColors()) {
+  drawBaseTrailSegment(0, step, target, size, colors);
 }
 
-function drawBaseTrailSegment(fromStep, toStep, target, size) {
+function drawBaseTrailSegment(fromStep, toStep, target, size, colors = activeColors()) {
   if (!recipe || toStep <= fromStep || pathPoints.length === 0) return;
-  const colors = activeColors();
   const alpha = TRAIL_ALPHA * PERMANENT_TRAIL_OPACITY;
   const start = clamp(Math.floor(fromStep), 0, recipe.totalSteps);
   const end = clamp(Math.floor(toStep), 0, recipe.totalSteps);
-  drawTrailRange(start, end, target, size, colors, alpha);
+  drawTrailRange(start, end, target, size, colors, alpha, { cap: TRAIL_CAP_BUTT });
 }
 
-function drawRecentTrailToStep(step, target, size) {
+function drawRecentTrailSegment(fromStep, toStep, target, size, colors = activeColors()) {
+  if (!recipe || toStep <= fromStep || pathPoints.length === 0) return;
+  const alpha = TRAIL_ALPHA * RECENT_TRAIL_OPACITY;
+  const start = clamp(Math.floor(fromStep), 0, recipe.totalSteps);
+  const end = clamp(Math.floor(toStep), 0, recipe.totalSteps);
+  drawTrailRange(start, end, target, size, colors, alpha, { cap: TRAIL_CAP_BUTT });
+}
+
+function fadeRecentTrailLayer(stepDelta, target, size) {
+  if (!recipe || !target || stepDelta <= 0) return;
+  const windowSteps = Math.max(1, recentFadeWindowSteps(recipe));
+  const fadeAlpha = 255 * (1 - Math.pow(RECENT_TRAIL_DECAY_REMAINDER, stepDelta / windowSteps));
+  if (fadeAlpha <= 0) return;
+
+  target.push();
+  target.drawingContext.save();
+  target.drawingContext.globalCompositeOperation = "destination-out";
+  target.noStroke();
+  target.fill(0, 0, 0, fadeAlpha);
+  target.rect(0, 0, size, size);
+  target.drawingContext.restore();
+  target.pop();
+}
+
+function drawRecentTrailToStep(step, target, size, colors = activeColors()) {
   if (!recipe || pathPoints.length === 0) return;
-  const colors = activeColors();
   const focusStep = clamp(Math.floor(step), 0, recipe.totalSteps);
   const windowSteps = recentFadeWindowSteps(recipe);
   const start = Math.max(0, focusStep - windowSteps);
@@ -1445,21 +1502,25 @@ function drawRecentTrailToStep(step, target, size) {
     const age = Math.abs(peakStep - midpoint);
     const opacity = recentTrailOpacityForAge(age, recipe);
     const alpha = TRAIL_ALPHA * RECENT_TRAIL_OPACITY * opacity;
-    drawTrailRange(chunkStart, chunkEnd, target, size, colors, alpha, RECENT_CHUNK_VERTEX_LIMIT);
+    drawTrailRange(chunkStart, chunkEnd, target, size, colors, alpha, {
+      cap: TRAIL_CAP_BUTT,
+      maxVertices: RECENT_CHUNK_VERTEX_LIMIT,
+    });
   }
 }
 
-function drawTrailRange(start, end, target, size, colors, alpha, maxVertices = MAX_REDRAW_VERTICES) {
+function drawTrailRange(start, end, target, size, colors, alpha, options = {}) {
   if (end <= start) return;
   if (alpha <= 0.2) return;
+  const { cap = TRAIL_CAP_ROUND, maxVertices = MAX_REDRAW_VERTICES } = options;
   const coreWeight = Math.max(3.6, size / 205);
 
   target.push();
   target.noFill();
   target.strokeJoin(ROUND);
-  target.strokeCap(ROUND);
   target.stroke(...colors.points, alpha);
   target.strokeWeight(coreWeight);
+  target.drawingContext.lineCap = cap;
   drawPathShape(target, start, end, size, maxVertices);
   target.pop();
 }
@@ -1476,15 +1537,92 @@ function advancePlayback() {
 
   const stride = playbackStride();
   const nextStep = clamp(currentStep + stride, 0, recipe.totalSteps);
+  const stepDelta = nextStep - currentStep;
 
   drawBaseTrailSegment(currentStep, nextStep, baseTrailLayer, canvasSize);
-  clearTransparentLayer(recentTrailLayer);
-  drawRecentTrailToStep(nextStep, recentTrailLayer, canvasSize);
+  fadeRecentTrailLayer(stepDelta, recentTrailLayer, canvasSize);
+  drawRecentTrailSegment(currentStep, nextStep, recentTrailLayer, canvasSize);
 
   currentStep = nextStep;
   renderedStep = nextStep;
 
   syncProgressUi();
+
+  if (nextStep >= recipe.totalSteps) {
+    beginEndingTransition();
+  }
+}
+
+function beginEndingTransition() {
+  if (!recipe || playbackState === PLAYBACK_ENDING) return;
+
+  const fromColors = normalizeColors(recipe.colors);
+  const seed = makeRecipeSeed();
+  const mode = ui.modeSelect.value || recipe.mode || "classic";
+  const toColors = pickRandomColors(seed, fromColors);
+  const nextRecipe = makeRecipe({ mode, seed, colors: toColors });
+  const maskLayer = createGraphics(canvasSize, canvasSize);
+  maskLayer.pixelDensity(1);
+  maskLayer.clear();
+  drawBaseTrailToStep(recipe.totalSteps, maskLayer, canvasSize, {
+    background: [0, 0, 0],
+    points: [255, 255, 255],
+  });
+  drawRecentTrailToStep(recipe.totalSteps, maskLayer, canvasSize, {
+    background: [0, 0, 0],
+    points: [255, 255, 255],
+  });
+
+  endingTransition = {
+    startMs: performance.now(),
+    durationMs: END_TRANSITION_MS,
+    fromColors,
+    toColors,
+    nextRecipe,
+    maskLayer,
+    fallDistance: canvasSize * 1.18,
+  };
+  playbackState = PLAYBACK_ENDING;
+  syncPlaybackUi();
+}
+
+function drawEndingTransition() {
+  if (!endingTransition) return;
+
+  const elapsed = performance.now() - endingTransition.startMs;
+  const progress = clamp(elapsed / endingTransition.durationMs, 0, 1);
+  const colorProgress = easeInOutCubic(progress);
+  const fallProgress = easeInCubic(progress);
+  const colors = {
+    background: lerpRgb(endingTransition.fromColors.background, endingTransition.toColors.background, colorProgress),
+    points: lerpRgb(endingTransition.fromColors.points, endingTransition.toColors.points, colorProgress),
+  };
+
+  syncArtworkBackground(colors);
+  background(...colors.background);
+  push();
+  tint(...colors.points, 255);
+  image(endingTransition.maskLayer, 0, endingTransition.fallDistance * fallProgress);
+  noTint();
+  pop();
+
+  if (progress >= 1) {
+    finishEndingTransition();
+  }
+}
+
+function finishEndingTransition() {
+  if (!endingTransition) return;
+  const nextRecipe = endingTransition.nextRecipe;
+  clearEndingTransition();
+  applyRecipe(nextRecipe, { startPlaying: true });
+}
+
+function clearEndingTransition() {
+  if (endingTransition?.maskLayer) {
+    endingTransition.maskLayer.remove();
+  }
+  endingTransition = null;
 }
 
 function drawPathShape(target, start, end, size, maxVertices = MAX_REDRAW_VERTICES) {
@@ -1516,23 +1654,27 @@ function mapPathIndexToCanvas(index, size) {
 
 function restartArtwork() {
   if (!recipe) return;
+  clearEndingTransition();
   currentStep = 0;
-  isPlaying = true;
-  sparkles = [];
+  playbackState = PLAYBACK_PLAYING;
   renderTrailToStep(0);
+  syncPlaybackUi();
 }
 
 function togglePlayback() {
   if (!recipe) return;
-  isPlaying = !isPlaying;
+  if (playbackState === PLAYBACK_ENDING) return;
+  playbackState = playbackState === PLAYBACK_PLAYING ? PLAYBACK_PAUSED : PLAYBACK_PLAYING;
   syncPlaybackUi();
 }
 
 function jumpToEnd() {
   if (!recipe) return;
+  clearEndingTransition();
   currentStep = recipe.totalSteps;
-  isPlaying = false;
+  playbackState = PLAYBACK_PAUSED;
   renderTrailToStep(currentStep);
+  syncPlaybackUi();
 }
 
 function enterFullscreen() {
@@ -1646,7 +1788,7 @@ function syncProgressUi() {
 }
 
 function syncPlaybackUi() {
-  const label = isPlaying ? "Pause" : "Play";
+  const label = playbackState === PLAYBACK_PLAYING ? "Pause" : playbackState === PLAYBACK_ENDING ? "Ending" : "Play";
   ui.playPauseBtn.textContent = label;
   if (ui.mobilePlayPauseBtn) ui.mobilePlayPauseBtn.textContent = label;
 }
@@ -1774,76 +1916,6 @@ function downloadBlob(blob, fileName) {
   URL.revokeObjectURL(url);
 }
 
-function updateSparkles() {
-  if (!sparkLayer || !recipe || pathPoints.length === 0) return;
-
-  const colors = activeColors();
-  sparkLayer.clear();
-
-  if (isPlaying && currentStep > 0 && currentStep < recipe.totalSteps) {
-    emitSparkles(colors);
-  }
-
-  sparkLayer.push();
-  sparkLayer.blendMode(ADD);
-  for (let index = sparkles.length - 1; index >= 0; index -= 1) {
-    const spark = sparkles[index];
-    spark.life -= 1;
-    spark.x += spark.vx;
-    spark.y += spark.vy;
-    spark.vx *= 0.965;
-    spark.vy *= 0.965;
-
-    if (spark.life <= 0) {
-      sparkles.splice(index, 1);
-      continue;
-    }
-
-    const progress = spark.life / spark.maxLife;
-    const alpha = 220 * progress * progress;
-    sparkLayer.noStroke();
-    sparkLayer.fill(...spark.color, alpha);
-    sparkLayer.circle(spark.x, spark.y, spark.size * (0.45 + progress));
-  }
-  sparkLayer.pop();
-}
-
-function emitSparkles(colors) {
-  const mapped = mapPathIndexToCanvas(currentStep, canvasSize);
-  const previousMapped = mapPathIndexToCanvas(currentStep - playbackStride(), canvasSize);
-  const angle = Math.atan2(mapped.y - previousMapped.y, mapped.x - previousMapped.x);
-  const count = 1;
-  const color = sparkColorForColors(colors);
-
-  for (let index = 0; index < count; index += 1) {
-    const sideSpray = random(-1.9, 1.9);
-    const speed = random(canvasSize * 0.0016, canvasSize * 0.006);
-    const direction = angle + Math.PI + sideSpray;
-    const life = random(12, 28);
-    sparkles.push({
-      x: mapped.x + random(-2, 2),
-      y: mapped.y + random(-2, 2),
-      vx: Math.cos(direction) * speed,
-      vy: Math.sin(direction) * speed,
-      life,
-      maxLife: life,
-      size: random(canvasSize * 0.0013, canvasSize * 0.0036),
-      color,
-    });
-  }
-
-  if (sparkles.length > SPARKLE_TRAIL_LIMIT) {
-    sparkles.splice(0, sparkles.length - SPARKLE_TRAIL_LIMIT);
-  }
-}
-
-function clearSparkles() {
-  sparkles = [];
-  if (sparkLayer) {
-    sparkLayer.clear();
-  }
-}
-
 function isDarkBackground(colors) {
   return luminance(colors.background) < 90;
 }
@@ -1958,6 +2030,22 @@ function gcd(a, b) {
 
 function clamp(value, minValue, maxValue) {
   return Math.min(Math.max(value, minValue), maxValue);
+}
+
+function positiveModulo(value, divisor) {
+  return ((value % divisor) + divisor) % divisor;
+}
+
+function easeInCubic(value) {
+  return value * value * value;
+}
+
+function easeInOutCubic(value) {
+  return value < 0.5 ? 4 * value * value * value : 1 - Math.pow(-2 * value + 2, 3) / 2;
+}
+
+function lerpRgb(fromRgb, toRgb, amount) {
+  return [0, 1, 2].map((index) => Math.round(fromRgb[index] + (toRgb[index] - fromRgb[index]) * amount));
 }
 
 function roundForRecipe(value) {
