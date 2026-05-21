@@ -99,6 +99,13 @@ h1 {
   user-select: none;
 }
 
+.end-transition-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+}
+
 .fullscreen-toolbar {
   display: none;
   position: absolute;
@@ -424,6 +431,58 @@ label,
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
+}
+
+.color-picker-field {
+  position: relative;
+  display: grid;
+  gap: 6px;
+}
+
+.color-trigger {
+  height: 38px;
+  width: 100%;
+  padding: 3px;
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  background: var(--panel);
+  cursor: pointer;
+}
+
+.color-trigger:hover {
+  border-color: var(--accent-strong);
+}
+
+.color-trigger[aria-expanded="true"] {
+  border-color: var(--accent);
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.color-trigger-swatch {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 5px;
+  background: var(--swatch-preview, #ddd);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.color-popover {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  z-index: 20;
+  padding: 8px;
+  background: var(--panel);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.color-popover[hidden] {
+  display: none;
 }
 
 .swatch-grid {

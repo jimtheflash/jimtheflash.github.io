@@ -74,7 +74,7 @@
               <div class="icon-row" id="innerShapeRow" role="radiogroup" aria-label="Inner wheel shape"></div>
               <div class="wheel-icon-wrap">
                 <svg id="wheelIcon" viewBox="-50 -50 100 100" aria-label="Wheel with pen-hole positions">
-                  <ellipse id="wheelOutline" cx="0" cy="0" rx="32" ry="32" fill="none" stroke="currentColor" stroke-width="2.5" />
+                  <path id="wheelOutline" d="" fill="none" stroke="currentColor" stroke-width="2.5" />
                   <g id="penHoleDots"></g>
                 </svg>
               </div>
@@ -112,16 +112,35 @@
               </div>
               <input id="epiRotationDriftRange" type="range" min="-10" max="10" step="0.1" value="0" />
             </div>
+            <div class="field">
+              <div class="label-row">
+                <label for="epiPulseRange">Pulse</label>
+                <span id="epiPulseValue">0.00</span>
+              </div>
+              <input id="epiPulseRange" type="range" min="0" max="0.30" step="0.01" value="0" />
+            </div>
           </div>
 
           <div class="color-pickers">
-            <div class="field">
-              <label id="bgSwatchLabel">Background</label>
-              <div id="bgSwatchGrid" class="swatch-grid" role="radiogroup" aria-labelledby="bgSwatchLabel"></div>
+            <div class="color-picker-field" id="bgPickerField">
+              <label id="bgPickerLabel" for="bgPickerTrigger">Background</label>
+              <button id="bgPickerTrigger" class="color-trigger" type="button"
+                      aria-haspopup="true" aria-expanded="false" aria-labelledby="bgPickerLabel">
+                <span class="color-trigger-swatch" id="bgPickerPreview"></span>
+              </button>
+              <div id="bgPickerPopover" class="color-popover" hidden>
+                <div id="bgSwatchGrid" class="swatch-grid" role="radiogroup" aria-labelledby="bgPickerLabel"></div>
+              </div>
             </div>
-            <div class="field">
-              <label id="fgSwatchLabel">Line color</label>
-              <div id="fgSwatchGrid" class="swatch-grid" role="radiogroup" aria-labelledby="fgSwatchLabel"></div>
+            <div class="color-picker-field" id="fgPickerField">
+              <label id="fgPickerLabel" for="fgPickerTrigger">Line color</label>
+              <button id="fgPickerTrigger" class="color-trigger" type="button"
+                      aria-haspopup="true" aria-expanded="false" aria-labelledby="fgPickerLabel">
+                <span class="color-trigger-swatch" id="fgPickerPreview"></span>
+              </button>
+              <div id="fgPickerPopover" class="color-popover" hidden>
+                <div id="fgSwatchGrid" class="swatch-grid" role="radiogroup" aria-labelledby="fgPickerLabel"></div>
+              </div>
             </div>
           </div>
 

@@ -32,7 +32,20 @@ const TRAIL_CAP_BUTT = "butt";
 const PLAYBACK_PLAYING = "playing";
 const PLAYBACK_PAUSED = "paused";
 const PLAYBACK_ENDING = "ending";
-const END_TRANSITION_MS = 1200;
+const END_HOLD_MS = 450;
+const END_TRANSITION_MS = 2700;
+const END_PARTICLE_COUNT = 900;
+const END_PARTICLE_VERTICES = 5;
+const END_PARTICLE_VERTEX_STRIDE = 220;
+const END_PARTICLE_BURST_SPEED_MIN = 90;
+const END_PARTICLE_BURST_SPEED_MAX = 360;
+const END_PARTICLE_DOWNWARD_BIAS = 70;
+const END_PARTICLE_SPIN_MAX = 4.5;
+const END_PARTICLE_RELEASE_JITTER_MS = 360;
+const END_PARTICLE_DRAG = 1.35;
+const END_PARTICLE_GRAVITY = 480;
+const END_PARTICLE_FADE_RATE = 0.42;
+const END_PARTICLE_STROKE_FACTOR = 0.9;
 const CONTROLS_WIDTH_STORAGE_KEY = "spirographPlaygroundControlsWidth";
 const DEFAULT_CONTROLS_WIDTH = 360;
 const MIN_CONTROLS_WIDTH = 280;
@@ -81,6 +94,8 @@ const PEN_HOLES = [
   { id: "nearEdge", label: "Near edge", ratio: 0.88 },
   { id: "outerReach", label: "Outer reach", ratio: 1.16 },
 ];
+
+const WHEEL_ICON_RADIUS = 38;
 
 const OUTER_SHAPE_BY_ID = Object.fromEntries(OUTER_SHAPES.map((shape) => [shape.id, shape]));
 const OUTER_SIZE_BY_ID = Object.fromEntries(OUTER_SIZES.map((size) => [size.id, size]));
@@ -169,10 +184,37 @@ function parseSwatchRgb(value) {
 
 function syncSwatchSelection() {
   if (!ui.bgSwatchGrid || !ui.fgSwatchGrid) return;
-  const bgKey = recipe ? rgbKey(recipe.colors.background) : null;
-  const fgKey = recipe ? rgbKey(recipe.colors.points) : null;
-  markActiveSwatch(ui.bgSwatchGrid, bgKey);
-  markActiveSwatch(ui.fgSwatchGrid, fgKey);
+  const bgRgb = recipe ? recipe.colors.background : null;
+  const fgRgb = recipe ? recipe.colors.points : null;
+  markActiveSwatch(ui.bgSwatchGrid, bgRgb ? rgbKey(bgRgb) : null);
+  markActiveSwatch(ui.fgSwatchGrid, fgRgb ? rgbKey(fgRgb) : null);
+  if (ui.bgPickerPreview && bgRgb) {
+    ui.bgPickerPreview.style.setProperty("--swatch-preview", `rgb(${bgRgb.join(",")})`);
+  }
+  if (ui.fgPickerPreview && fgRgb) {
+    ui.fgPickerPreview.style.setProperty("--swatch-preview", `rgb(${fgRgb.join(",")})`);
+  }
+}
+
+function closeColorPopovers(except) {
+  [ui.bgPickerField, ui.fgPickerField].forEach((field) => {
+    if (!field || field === except) return;
+    const trigger = field.querySelector(".color-trigger");
+    const popover = field.querySelector(".color-popover");
+    if (popover) popover.hidden = true;
+    if (trigger) trigger.setAttribute("aria-expanded", "false");
+  });
+}
+
+function toggleColorPopover(field) {
+  if (!field) return;
+  const trigger = field.querySelector(".color-trigger");
+  const popover = field.querySelector(".color-popover");
+  if (!trigger || !popover) return;
+  const isOpen = !popover.hidden;
+  closeColorPopovers(field);
+  popover.hidden = isOpen;
+  trigger.setAttribute("aria-expanded", String(!isOpen));
 }
 
 function markActiveSwatch(grid, activeKey) {
@@ -211,6 +253,10 @@ function draw() {
 }
 
 function windowResized() {
+  if (endingTransition) {
+    clearEndingTransition();
+    playbackState = PLAYBACK_PAUSED;
+  }
   resizeArtworkCanvas();
 }
 
@@ -235,8 +281,18 @@ function cacheUi() {
     epiWobbleFreqValue: document.getElementById("epiWobbleFreqValue"),
     epiRotationDriftRange: document.getElementById("epiRotationDriftRange"),
     epiRotationDriftValue: document.getElementById("epiRotationDriftValue"),
+    epiPulseRange: document.getElementById("epiPulseRange"),
+    epiPulseValue: document.getElementById("epiPulseValue"),
     bgSwatchGrid: document.getElementById("bgSwatchGrid"),
     fgSwatchGrid: document.getElementById("fgSwatchGrid"),
+    bgPickerField: document.getElementById("bgPickerField"),
+    fgPickerField: document.getElementById("fgPickerField"),
+    bgPickerTrigger: document.getElementById("bgPickerTrigger"),
+    fgPickerTrigger: document.getElementById("fgPickerTrigger"),
+    bgPickerPreview: document.getElementById("bgPickerPreview"),
+    fgPickerPreview: document.getElementById("fgPickerPreview"),
+    bgPickerPopover: document.getElementById("bgPickerPopover"),
+    fgPickerPopover: document.getElementById("fgPickerPopover"),
     randomizeBtn: document.getElementById("randomizeBtn"),
     restartBtn: document.getElementById("restartBtn"),
     playPauseBtn: document.getElementById("playPauseBtn"),
@@ -433,16 +489,33 @@ function installUiEvents() {
   ui.epiWobbleAmountRange.addEventListener("input", () => applyEpicycleChange("wobbleAmount", Number(ui.epiWobbleAmountRange.value)));
   ui.epiWobbleFreqRange.addEventListener("input", () => applyEpicycleChange("wobbleFrequency", Number(ui.epiWobbleFreqRange.value)));
   ui.epiRotationDriftRange.addEventListener("input", () => applyEpicycleChange("rotationDrift", Number(ui.epiRotationDriftRange.value) * Math.PI));
+  ui.epiPulseRange.addEventListener("input", () => applyEpicycleChange("pulse", Number(ui.epiPulseRange.value)));
 
   ui.bgSwatchGrid.addEventListener("click", (event) => {
     const target = event.target.closest("[data-rgb]");
     if (!target) return;
     applyColorChangeRgb("background", parseSwatchRgb(target.dataset.rgb));
+    closeColorPopovers();
   });
   ui.fgSwatchGrid.addEventListener("click", (event) => {
     const target = event.target.closest("[data-rgb]");
     if (!target) return;
     applyColorChangeRgb("points", parseSwatchRgb(target.dataset.rgb));
+    closeColorPopovers();
+  });
+
+  if (ui.bgPickerTrigger) {
+    ui.bgPickerTrigger.addEventListener("click", () => toggleColorPopover(ui.bgPickerField));
+  }
+  if (ui.fgPickerTrigger) {
+    ui.fgPickerTrigger.addEventListener("click", () => toggleColorPopover(ui.fgPickerField));
+  }
+  document.addEventListener("pointerdown", (event) => {
+    const inField = event.target.closest(".color-picker-field");
+    if (!inField) closeColorPopovers();
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") closeColorPopovers();
   });
 
   ui.speedRange.addEventListener("input", () => {
@@ -467,6 +540,11 @@ function installUiEvents() {
   ui.saveRecipeBtn.addEventListener("click", saveRecipe);
   ui.loadRecipeBtn.addEventListener("click", loadRecipeFromBox);
   document.addEventListener("fullscreenchange", () => {
+    if (endingTransition) {
+      clearEndingTransition();
+      playbackState = PLAYBACK_PAUSED;
+      syncPlaybackUi();
+    }
     if (document.fullscreenElement) {
       exitAppFullscreen();
     }
@@ -920,12 +998,20 @@ function syncShapeControls() {
     dot.classList.toggle("is-active", matches);
   });
 
-  // Update wheel preview to reflect inner ellipse vs. circle.
+  // Update wheel preview to reflect inner ellipse vs. circle vs. half-circle.
   const innerShape = INNER_SHAPE_BY_ID[recipe.shape.innerShapeId] || INNER_SHAPES[0];
   if (ui.wheelOutline) {
-    ui.wheelOutline.setAttribute("rx", String(32 * innerShape.aspectX));
-    ui.wheelOutline.setAttribute("ry", String(32 * innerShape.aspectY));
+    const rx = WHEEL_ICON_RADIUS * innerShape.aspectX;
+    const ry = WHEEL_ICON_RADIUS * innerShape.aspectY;
+    ui.wheelOutline.setAttribute("d", wheelOutlinePath(innerShape.id, rx, ry));
   }
+}
+
+function wheelOutlinePath(shapeId, rx, ry) {
+  if (shapeId === "halfCircle") {
+    return `M ${-rx} 0 A ${rx} ${ry} 0 0 1 ${rx} 0 Z`;
+  }
+  return `M ${-rx} 0 A ${rx} ${ry} 0 1 1 ${rx} 0 A ${rx} ${ry} 0 1 1 ${-rx} 0 Z`;
 }
 
 function markActiveButtons(row, datasetKey, activeValue) {
@@ -948,6 +1034,7 @@ function syncEpicycleControls() {
   const wobbleAmount = Number(recipe.params.wobbleAmount) || 0;
   const wobbleFreq = Number(recipe.params.wobbleFrequency) || 1;
   const driftPi = (Number(recipe.params.rotationDrift) || 0) / Math.PI;
+  const pulse = Number(recipe.params.pulse) || 0;
 
   ui.epiSymmetryRange.value = String(clamp(symmetry, 3, 9));
   ui.epiSymmetryValue.textContent = String(clamp(symmetry, 3, 9));
@@ -957,6 +1044,8 @@ function syncEpicycleControls() {
   ui.epiWobbleFreqValue.textContent = wobbleFreq.toFixed(1);
   ui.epiRotationDriftRange.value = String(clamp(driftPi, -10, 10));
   ui.epiRotationDriftValue.textContent = driftPi.toFixed(1);
+  ui.epiPulseRange.value = String(clamp(pulse, 0, 0.3));
+  ui.epiPulseValue.textContent = pulse.toFixed(2);
 }
 
 // Recipes from v3 used `shape.fixedPieceId` (e.g. "ring96", "outer72"). Map
@@ -1080,6 +1169,9 @@ function normalizeEpicycleParams(params = {}) {
     wobbleAmount: Number.isFinite(Number(params.wobbleAmount)) ? Number(params.wobbleAmount) : 0,
     wobbleFrequency: Number.isFinite(Number(params.wobbleFrequency)) ? Number(params.wobbleFrequency) : 1,
     wobblePhase: Number.isFinite(Number(params.wobblePhase)) ? Number(params.wobblePhase) : 0,
+    pulse: Number.isFinite(Number(params.pulse)) ? Number(params.pulse) : 0,
+    pulseFrequency: Number.isFinite(Number(params.pulseFrequency)) ? Number(params.pulseFrequency) : 2.5,
+    pulsePhase: Number.isFinite(Number(params.pulsePhase)) ? Number(params.pulsePhase) : 0,
     components,
     tMax: Number.isFinite(Number(params.tMax)) ? Number(params.tMax) : TWO_PI_VALUE * 48,
   };
@@ -1204,6 +1296,9 @@ function makeEpicycleParams(seed) {
       wobbleAmount: roundForRecipe(randomBetween(rng, 0.025, 0.11)),
       wobbleFrequency: roundForRecipe(randomBetween(rng, 1.5, 6.5)),
       wobblePhase: roundForRecipe(randomBetween(rng, 0, TWO_PI_VALUE)),
+      pulse: roundForRecipe(randomBetween(rng, 0, 0.18)),
+      pulseFrequency: roundForRecipe(randomBetween(rng, 1.5, 4.5)),
+      pulsePhase: roundForRecipe(randomBetween(rng, 0, TWO_PI_VALUE)),
       components,
       repeatCount: passCount,
       tMax: roundForRecipe(TWO_PI_VALUE * passCount),
@@ -1378,6 +1473,15 @@ function rawEpicyclePoint(params, progress) {
     x += radius * Math.cos(angle);
     y += radius * Math.sin(angle);
   });
+
+  const pulseAmount = params.pulse || 0;
+  if (pulseAmount > 0) {
+    const pulseFreq = params.pulseFrequency || 2.5;
+    const pulsePhase = params.pulsePhase || 0;
+    const pulseFactor = 1 + pulseAmount * Math.sin(TWO_PI_VALUE * pulseFreq * progress + pulsePhase);
+    x *= pulseFactor;
+    y *= pulseFactor;
+  }
 
   return rotatePoint({ x, y }, params.rotation + (params.rotationDrift || 0) * progress);
 }
@@ -1573,17 +1677,87 @@ function beginEndingTransition() {
     points: [255, 255, 255],
   });
 
+  const vw = Math.max(window.innerWidth, canvasSize);
+  const vh = Math.max(window.innerHeight, canvasSize);
+  const overlay = createGraphics(vw, vh);
+  overlay.pixelDensity(1);
+  overlay.canvas.classList.add("end-transition-overlay");
+  overlay.canvas.style.display = "block";
+
+  const overlayParent = document.fullscreenElement || document.body;
+  overlayParent.appendChild(overlay.canvas);
+
+  const mainCanvasEl = document.querySelector("#canvasMount canvas");
+  const rect = mainCanvasEl
+    ? mainCanvasEl.getBoundingClientRect()
+    : { left: 0, top: 0, width: canvasSize, height: canvasSize };
+  const overlayScale = (rect.width || canvasSize) / canvasSize;
+  const overlayOffset = { x: rect.left, y: rect.top };
+  const canvasRectInViewport = {
+    x: rect.left,
+    y: rect.top,
+    width: rect.width || canvasSize,
+    height: rect.height || canvasSize,
+  };
+
   endingTransition = {
     startMs: performance.now(),
     durationMs: END_TRANSITION_MS,
+    holdSec: END_HOLD_MS / 1000,
     fromColors,
     toColors,
     nextRecipe,
     maskLayer,
-    fallDistance: canvasSize * 1.18,
+    particles: buildEndingParticles(recipe.seed, canvasSize),
+    overlay,
+    overlayParent,
+    overlayOffset,
+    overlayScale,
+    canvasRectInViewport,
+    viewport: { w: vw, h: vh },
   };
   playbackState = PLAYBACK_ENDING;
   syncPlaybackUi();
+}
+
+function buildEndingParticles(seed, size) {
+  const rng = mulberry32((seed ^ 0xb7e15163) >>> 0);
+  const halfSize = size * 0.5;
+  const totalSteps = recipe ? recipe.totalSteps : 0;
+  const spacing = totalSteps / END_PARTICLE_COUNT;
+  const stride = END_PARTICLE_VERTEX_STRIDE;
+  const halfSpan = ((END_PARTICLE_VERTICES - 1) * stride) * 0.5;
+  const particles = [];
+  for (let i = 0; i < END_PARTICLE_COUNT; i += 1) {
+    const centerStep = (i + 0.5) * spacing + (rng() - 0.5) * spacing * 0.6;
+    const samples = [];
+    let sumX = 0;
+    let sumY = 0;
+    for (let v = 0; v < END_PARTICLE_VERTICES; v += 1) {
+      const stepIndex = centerStep + (v * stride - halfSpan);
+      const np = normalizedPointAt(stepIndex);
+      const px = halfSize + np.x * halfSize;
+      const py = halfSize + np.y * halfSize;
+      samples.push({ x: px, y: py });
+      sumX += px;
+      sumY += py;
+    }
+    const cx = sumX / END_PARTICLE_VERTICES;
+    const cy = sumY / END_PARTICLE_VERTICES;
+    const verts = samples.map((s) => ({ ox: s.x - cx, oy: s.y - cy }));
+    const dx = cx - halfSize;
+    const dy = cy - halfSize;
+    const baseAngle = dx === 0 && dy === 0 ? rng() * Math.PI * 2 : Math.atan2(dy, dx);
+    const speed = END_PARTICLE_BURST_SPEED_MIN + rng() * (END_PARTICLE_BURST_SPEED_MAX - END_PARTICLE_BURST_SPEED_MIN);
+    const vx = Math.cos(baseAngle) * speed * (0.8 + rng() * 0.4);
+    const vy = Math.sin(baseAngle) * speed * (0.8 + rng() * 0.4)
+      + END_PARTICLE_DOWNWARD_BIAS * (0.5 + rng());
+    const spin = (rng() - 0.5) * 2 * END_PARTICLE_SPIN_MAX;
+    const releaseDelaySec = (rng() * END_PARTICLE_RELEASE_JITTER_MS) / 1000;
+    const fadeRate = END_PARTICLE_FADE_RATE * (0.75 + rng() * 0.5);
+    particles.push({ cx, cy, verts, vx, vy, spin, releaseDelaySec, fadeRate });
+  }
+  return particles;
 }
 
 function drawEndingTransition() {
@@ -1592,7 +1766,6 @@ function drawEndingTransition() {
   const elapsed = performance.now() - endingTransition.startMs;
   const progress = clamp(elapsed / endingTransition.durationMs, 0, 1);
   const colorProgress = easeInOutCubic(progress);
-  const fallProgress = easeInCubic(progress);
   const colors = {
     background: lerpRgb(endingTransition.fromColors.background, endingTransition.toColors.background, colorProgress),
     points: lerpRgb(endingTransition.fromColors.points, endingTransition.toColors.points, colorProgress),
@@ -1600,11 +1773,63 @@ function drawEndingTransition() {
 
   syncArtworkBackground(colors);
   background(...colors.background);
-  push();
-  tint(...colors.points, 255);
-  image(endingTransition.maskLayer, 0, endingTransition.fallDistance * fallProgress);
-  noTint();
-  pop();
+  const elapsedSec = (performance.now() - endingTransition.startMs) / 1000;
+  const { maskLayer, particles, holdSec, overlay, overlayOffset, overlayScale, viewport, canvasRectInViewport } = endingTransition;
+  if (overlay) {
+    overlay.clear();
+    overlay.push();
+    overlay.noStroke();
+    overlay.fill(colors.background[0], colors.background[1], colors.background[2]);
+    overlay.rect(canvasRectInViewport.x, canvasRectInViewport.y, canvasRectInViewport.width, canvasRectInViewport.height);
+    overlay.pop();
+    overlay.push();
+    overlay.translate(overlayOffset.x, overlayOffset.y);
+    overlay.scale(overlayScale, overlayScale);
+    if (elapsedSec < holdSec) {
+      overlay.tint(colors.points[0], colors.points[1], colors.points[2], 255);
+      overlay.image(maskLayer, 0, 0);
+      overlay.noTint();
+    } else {
+      const burstSec = elapsedSec - holdSec;
+      const strokeWeightVal = Math.max(3.2, canvasSize / 205) * END_PARTICLE_STROKE_FACTOR;
+      const margin = 100;
+      const k = END_PARTICLE_DRAG;
+      const viewportBottomCanvas = (viewport.h - overlayOffset.y) / overlayScale + margin;
+      const viewportLeftCanvas = -overlayOffset.x / overlayScale - margin;
+      const viewportRightCanvas = (viewport.w - overlayOffset.x) / overlayScale + margin;
+      overlay.noFill();
+      overlay.strokeJoin(ROUND);
+      overlay.strokeWeight(strokeWeightVal);
+      overlay.drawingContext.lineCap = "round";
+      for (const p of particles) {
+        const t = burstSec - p.releaseDelaySec;
+        let x = p.cx;
+        let y = p.cy;
+        let rot = 0;
+        let alpha = 255;
+        if (t > 0) {
+          const decay = 1 - Math.exp(-k * t);
+          x = p.cx + (p.vx / k) * decay;
+          y = p.cy + (p.vy / k) * decay
+            + (END_PARTICLE_GRAVITY / k) * (t - decay / k);
+          rot = p.spin * (decay / k);
+          alpha = 255 * clamp(1 - p.fadeRate * t, 0, 1);
+          if (alpha <= 0) continue;
+          if (y > viewportBottomCanvas) continue;
+          if (x < viewportLeftCanvas || x > viewportRightCanvas) continue;
+        }
+        overlay.stroke(colors.points[0], colors.points[1], colors.points[2], alpha);
+        overlay.push();
+        overlay.translate(x, y);
+        if (rot !== 0) overlay.rotate(rot);
+        overlay.beginShape();
+        for (const v of p.verts) overlay.vertex(v.ox, v.oy);
+        overlay.endShape();
+        overlay.pop();
+      }
+    }
+    overlay.pop();
+  }
 
   if (progress >= 1) {
     finishEndingTransition();
@@ -1621,6 +1846,10 @@ function finishEndingTransition() {
 function clearEndingTransition() {
   if (endingTransition?.maskLayer) {
     endingTransition.maskLayer.remove();
+  }
+  if (endingTransition?.overlay) {
+    if (endingTransition.overlay.canvas) endingTransition.overlay.canvas.remove();
+    endingTransition.overlay.remove();
   }
   endingTransition = null;
 }
@@ -2034,10 +2263,6 @@ function clamp(value, minValue, maxValue) {
 
 function positiveModulo(value, divisor) {
   return ((value % divisor) + divisor) % divisor;
-}
-
-function easeInCubic(value) {
-  return value * value * value;
 }
 
 function easeInOutCubic(value) {
